@@ -4,7 +4,7 @@ OBJS = Audio.o Enemy.o MyClock.o AnimatedSprite.o Player.o main.o
 
 LIBS = -lpthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
-TARGET = sfml-app
+TARGET = piknic.app
 CXX = g++
 
 $(TARGET):	$(OBJS)
