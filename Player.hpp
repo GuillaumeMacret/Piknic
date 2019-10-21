@@ -1,4 +1,4 @@
-#include "Audio.hpp"
+#include "PlayerAudio.hpp"
 #include "AnimatedSprite/AnimatedSprite.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -12,7 +12,7 @@ class Player{
         float moveX = 0,moveY = 0,x,y;
         float jumpTimer = 0, IframeCounter;
 
-        Audio audioPlayer;
+        PlayerAudio audioPlayer;
         sf::FloatRect lastBoundingBox;
         bool isMoving = false, isJumping = false,isAttacking = false;
         int facingDirection = 1;

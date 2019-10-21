@@ -1,4 +1,5 @@
 #include "RectTools.hpp"
+#include "GameAudio.hpp"
 #include "Map/MapLoader.hpp"
 #include "Enemy.hpp"
 #include "Constants.hpp"
@@ -59,6 +60,8 @@ void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collis
 int main(){
 	sf::RenderWindow window(sf::VideoMode(1280,720),"Piknic!");
 	window.setFramerateLimit(60);
+
+	GameAudio gameAudio;
 
 	sf::Font font;
 	if (!font.loadFromFile("ressources/Go-Bold.ttf"))
@@ -248,7 +251,6 @@ int main(){
 
         float fps = 1.f / averageTime;
 		fpsCountText.setString("fps : " + std::to_string((int)fps));
-
 		/*Inputs*/
 		sf::Event event;
 		while(window.pollEvent(event)){
@@ -422,6 +424,7 @@ int main(){
 				if(pickRing){
 					rings.erase(rings.begin()+i);
 					++player.ringCounter;
+					gameAudio.playRingPickup();
 				}
 			}
 		}
