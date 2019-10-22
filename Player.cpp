@@ -139,7 +139,7 @@ void Player::setVelocityInMoveX(){
 
 void Player::doVelocityMove(){
     lastBoundingBox = sf::FloatRect(currentSprite.getGlobalBounds());
-	std::cerr<<"Vector moving : "<<moveX<<", "<<moveY<<std::endl;
+	// std::cerr<<"Vector moving : "<<moveX<<", "<<moveY<<std::endl;
     currentSprite.move(sf::Vector2f(moveX,moveY));
 }
 

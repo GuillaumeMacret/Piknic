@@ -243,6 +243,14 @@ int main(){
 	fpsCountText.setFillColor(sf::Color::White);
 	fpsCountText.setString("fps");
 
+	sf::Text ringCountText;
+	ringCountText.setFont(font);
+	ringCountText.setCharacterSize(24);
+	ringCountText.setFillColor(sf::Color::White);
+	ringCountText.setString("__ rings");
+	ringCountText.setPosition(10,100);
+
+
 	while(window.isOpen()){
 
         deltaTime = clock.restart().asSeconds();
@@ -290,44 +298,14 @@ int main(){
 		float collisionReadjustX = BIG_FLOAT , collisionReadjustY= BIG_FLOAT;
 		int dirMulX = 1, dirMulY = 1;
 		//std::cerr<<"Vector move before : "<<player.moveX<<", "<<player.moveY<<std::endl;
-		//Y-Collision
-		collisionReadjustY= BIG_FLOAT;
-		for(int i = 0;i < collisionTiles.size();++i){
-			sf::FloatRect futurRect = player.currentSprite.getGlobalBounds();
-			futurRect.top += player.moveY;
-			movementRect = getContainingRect(player.currentSprite.getGlobalBounds(),futurRect);
-			if(movementRect->intersects(collisionTiles[i]->getGlobalBounds())){
-				sf::FloatRect intersection;
-				movementRect->intersects(collisionTiles[i]->getGlobalBounds(),intersection);
-				sf::FloatRect *tileBox = new sf::FloatRect(collisionTiles[i]->getGlobalBounds());
-				
-				futurRect = player.currentSprite.getGlobalBounds();
-				futurRect.left += player.moveX;
-				futurRect.top += player.moveY;
-	 			movementRect = getContainingRect(player.currentSprite.getGlobalBounds(),futurRect);
-
-
-				float yOffset = intersection.height;
-				if(movementRect->top < collisionTiles[i]->getGlobalBounds().top){
-					dirMulY = -1;
-				}
-				if(yOffset > 0){
-					std::cerr<<"Y gap to hug wall : "<<yOffset<<" Dir modofier : " << dirMulY<< std::endl;
-					//If the tile is closer (movementY less than previous, store it)
-					if(collisionReadjustY > yOffset)collisionReadjustY = yOffset;
-				}
-    		}
-		}
-		if(collisionReadjustY <= averageTime * GRAVITY + 1){
-			player.moveY += collisionReadjustY * dirMulY;
-			if(dirMulY == -1) player.jumpTimer=0;
-		}
 
 		//X-Collision
 		collisionReadjustX = BIG_FLOAT;
 		for(int i=0; i < collisionTiles.size();++i){
 			sf::FloatRect futurRect = player.currentSprite.getGlobalBounds();
 			futurRect.left += player.moveX;
+			//Move the player up a bit to avoid unintended collision
+			futurRect.top -= 1;
 			movementRect = getContainingRect(player.currentSprite.getGlobalBounds(),futurRect);
 			if(movementRect->intersects(collisionTiles[i]->getGlobalBounds())){
 				sf::FloatRect intersection;
@@ -337,44 +315,45 @@ int main(){
 				if(movementRect->left < collisionTiles[i]->getGlobalBounds().left){
 					dirMulX = -1;
 				}
-				if(xOffset > 0){
-					std::cerr<<"X gap to hug wall : "<<xOffset * dirMulX <<std::endl;
+				// std::cerr<<"X gap to hug wall : "<<xOffset * dirMulX <<std::endl;
 				//If the tile is closer (movementX less than previous, store it)
-					if(collisionReadjustX > xOffset)collisionReadjustX = xOffset;
-				}
-				if(collisionReadjustX < BIG_FLOAT){
-					player.moveX += collisionReadjustX * dirMulX;
-					//FIXME Without this player slowly embeds into wall, find a fix
-					player.velocity = 0;
-				}
+				if(collisionReadjustX > xOffset)collisionReadjustX = xOffset;
 			}
 		}
+		if(collisionReadjustX < BIG_FLOAT){
+			player.moveX += collisionReadjustX * dirMulX;
+			//FIXME Without this player slowly embeds into wall, find a fix
+			player.velocity = 0;
+		}
+
+		//Y-Collision
+		collisionReadjustY= BIG_FLOAT;
+		for(int i = 0;i < collisionTiles.size();++i){
+			sf::FloatRect futurRect = player.currentSprite.getGlobalBounds();
+			futurRect.top += player.moveY;
+			movementRect = getContainingRect(player.currentSprite.getGlobalBounds(),futurRect);
+			if(movementRect->intersects(collisionTiles[i]->getGlobalBounds())){
+				sf::FloatRect intersection;
+				movementRect->intersects(collisionTiles[i]->getGlobalBounds(),intersection);
+
+				float yOffset = intersection.height;
+				if(movementRect->top < collisionTiles[i]->getGlobalBounds().top){
+					dirMulY = -1;
+				}
+				// std::cerr<<"Y gap to hug wall : "<<yOffset<<" Dir modofier : " << dirMulY<< std::endl;
+				//If the tile is closer (movementY less than previous, store it)
+				if(collisionReadjustY > yOffset)collisionReadjustY = yOffset;
+    		}
+		}
+		if(collisionReadjustY < BIG_FLOAT){
+			std::cerr << "Readjusting y by " << collisionReadjustY * dirMulY<<std::endl;
+			player.moveY += collisionReadjustY * dirMulY;
+			if(dirMulY == -1) player.jumpTimer=0;
+		}
+
 		//std::cerr<<"Vector move after : "<<player.moveX<<", "<<player.moveY<<std::endl;
 
 		player.doVelocityMove();
-		
-
-		// player.resetForces();
-		// player.moveX = TILE_SIZE * 10;
-		// for(int i = 0;i < collisionTiles.size();++i){
-		// 	//TODO check Y-axis collision
-
-		// 	int collisionSide = player.isMovementColliding(collisionTiles[i]->getGlobalBounds());
-		// 	if(collisionSide != NO_COLLISION && collisionSide != TOP_COLLISION){
-		// 		player.velocity = 0;
-		// 		player.handleMovementCollision(collisionTiles[i]->getGlobalBounds());
-		// 	}
-		// }
-		// if(player.moveX < TILE_SIZE * 10) {
-		// 	player.doMove();
-		// }
-
-
-		// for(int i = 0;i < collisionTiles.size();++i){
-		// 	if(player.isColliding(collisionTiles[i]->getGlobalBounds())){
-		// 		player.handleWallCollision(collisionTiles[i]->getGlobalBounds());
-		// 	}
-		// }
 
 		delete movementRect;
 		movementRect = getContainingRect(*player.getCurrentRect(),*player.getLastRect());
@@ -423,7 +402,6 @@ int main(){
 				bool pickRing = player.handleRingCollision(rings[i]->getGlobalBounds());
 				if(pickRing){
 					rings.erase(rings.begin()+i);
-					++player.ringCounter;
 					gameAudio.playRingPickup();
 				}
 			}
@@ -454,6 +432,8 @@ int main(){
 			cameraY = playerY;
 		}
 		player.updateAnimation(averageTime);
+
+		ringCountText.setString(std::to_string(player.ringCounter) + " rings");
 
 		view.setCenter(cameraX,cameraY);
 
@@ -502,12 +482,13 @@ int main(){
 		exitRect.move(sf::Vector2f(maps[currentLevel]->exit.left, maps[currentLevel]->exit.top));
 		exitRect.setFillColor(sf::Color(100,100,100,200));
 		window.draw(exitRect);
-		/*end Debug*/
+		/*End Debug*/
 
 
 		loadTexture = false;
 		window.setView(window.getDefaultView());
 		window.draw(fpsCountText);
+		window.draw(ringCountText);
 		window.display();
 	}
 
