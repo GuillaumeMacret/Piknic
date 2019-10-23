@@ -1,6 +1,6 @@
 CXXFLAGS = -std=c++11
 
-OBJS = GameAudio.o PlayerAudio.o Enemy.o MyClock.o AnimatedSprite.o Player.o main.o 
+OBJS = bin/GameAudio.o bin/PlayerAudio.o bin/Enemy.o bin/MyClock.o bin/AnimatedSprite.o bin/Player.o bin/main.o 
 
 LIBS = -lpthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
@@ -17,24 +17,25 @@ clean:
 	rm -f $(OBJS) $(TARGET)
 	rm -rf *.*~
 	rm -rf *~
+	rm -rf *.o
 
-Enemy.o : Enemy.hpp Enemy.cpp
-	c++ -c Enemy.cpp -o Enemy.o
+bin/main.o : src/main.cpp
+	c++ -c src/main.cpp -o bin/main.o
 
-MyClock.o : MyClock.hpp MyClock.cpp
-	c++ -c MyClock.cpp -o MyClock.o
+bin/Enemy.o : src/Enemy.hpp src/Enemy.cpp
+	c++ -c src/Enemy.cpp -o bin/Enemy.o
 
-Player.o: Player.hpp Player.cpp
-	c++ -c Player.cpp -o Player.o
+bin/MyClock.o : src/MyClock.hpp src/MyClock.cpp
+	c++ -c src/MyClock.cpp -o bin/MyClock.o
 
-PlayerAudio.o: PlayerAudio.hpp PlayerAudio.cpp
-	c++ -c PlayerAudio.cpp -o PlayerAudio.o
+bin/Player.o: src/Player.hpp src/Player.cpp
+	c++ -c src/Player.cpp -o bin/Player.o
 
-GameAudio.o: GameAudio.hpp GameAudio.cpp
-	c++ -c GameAudio.cpp -o GameAudio.o
+bin/PlayerAudio.o: src/PlayerAudio.hpp src/PlayerAudio.cpp
+	c++ -c src/PlayerAudio.cpp -o bin/PlayerAudio.o
 
-AnimatedSprite.o: AnimatedSprite/AnimatedSprite.hpp AnimatedSprite/AnimatedSprite.cpp
-	c++ -c AnimatedSprite/AnimatedSprite.cpp -o AnimatedSprite.o
+bin/GameAudio.o: src/GameAudio.hpp src/GameAudio.cpp
+	c++ -c src/GameAudio.cpp -o bin/GameAudio.o
 
-PikachuWalkingRightAnim.o : AnimatedSprite/Pikachu/PikachuWalkingRightAnim.cpp AnimatedSprite/Pikachu/PikachuWalkingRightAnim.hpp
-	c++ -c AnimatedSprite/Pikachu/PikachuWalkingRightAnim.cpp -o PikachuWalkingRightAnim.o
+bin/AnimatedSprite.o: src/AnimatedSprite.hpp src/AnimatedSprite.cpp
+	c++ -c src/AnimatedSprite.cpp -o bin/AnimatedSprite.o

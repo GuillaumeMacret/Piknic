@@ -1,5 +1,5 @@
 #include "PlayerAudio.hpp"
-#include "AnimatedSprite/AnimatedSprite.hpp"
+#include "AnimatedSprite.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 

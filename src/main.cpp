@@ -1,14 +1,13 @@
 #include "RectTools.hpp"
 #include "GameAudio.hpp"
-#include "Map/MapLoader.hpp"
+#include "../Map/MapLoader.hpp"
 #include "Enemy.hpp"
 #include "Constants.hpp"
 #include "MyClock.hpp"
 #include <sstream>
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "AnimatedSprite/AnimatedSprite.hpp"
-#include "AnimatedSprite/Pikachu/PikachuWalkingRightAnim.hpp"
+#include "AnimatedSprite.hpp"
 #include "Player.hpp"
 #include <fstream>
 #include <string>
