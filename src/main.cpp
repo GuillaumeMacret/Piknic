@@ -380,15 +380,6 @@ int main(){
 			}
 		}
 
-		// for(auto it = rings.begin();it != rings.end();++it){
-		// 	if((*it)->getGlobalBounds().intersects(player.getCurrentSprite().getGlobalBounds())){
-		// 		bool pickRing = player.handleRingCollision((*it)->getGlobalBounds());
-		// 		if(pickRing){
-		// 			rings.erase(it);
-		// 		}
-		// 	}
-		// }
-
 		for(int i = 0; i < rings.size(); ++i){
 			if(rings[i]->getGlobalBounds().intersects(player.getCurrentSprite().getGlobalBounds())){
 				bool pickRing = player.handleRingCollision(rings[i]->getGlobalBounds());
@@ -433,7 +424,10 @@ int main(){
 		window.setView(view);
 		window.clear();
 		window.draw(bgSprite);
+		if(player.IframeCounter <= I_FRAME_DUR) player.currentSprite.setColor(sf::Color(255, 255, 255, 128));
 		window.draw(player.getCurrentSprite());
+		player.currentSprite.setColor(sf::Color(255,255,255,255));
+		//TODO may need to set
 		for(int i = 0; i < levelsSprites[currentLevel].size(); ++i){
 			//FIXME When having an empty tile, calls draw on null, try to avoid that
 			if(levelsSprites[currentLevel][i]){
@@ -457,6 +451,7 @@ int main(){
 		}
 
 		/*Debug*/
+		/*
 		sf::RectangleShape rectMv(sf::Vector2f(movementRect->width,movementRect->height));
 		rectMv.move(sf::Vector2f(movementRect->left,movementRect->top));
 		rectMv.setFillColor(sf::Color(255,0,0,200));
@@ -474,6 +469,7 @@ int main(){
 		exitRect.move(sf::Vector2f(maps[currentLevel]->exit.left, maps[currentLevel]->exit.top));
 		exitRect.setFillColor(sf::Color(100,100,100,200));
 		window.draw(exitRect);
+		*/
 		/*End Debug*/
 
 

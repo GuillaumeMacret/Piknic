@@ -1,6 +1,7 @@
 - Check if calling delete on enemy is needed
-- Use map for anim
 - Animations (enemies)
 - Level design
 - Ring handing
-- anim for Ifram
+- Anim for Ifram
+- Plateformes traversables
+- Bug spin dash volant

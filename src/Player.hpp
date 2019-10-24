@@ -4,8 +4,6 @@
 #include <SFML/Audio.hpp>
 #include <map>
 
-#define I_FRAME_DUR 0.5f
-
 class Player{
     public:
 

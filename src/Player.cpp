@@ -13,7 +13,7 @@
 #define MAXIMUM_JUMP_TIMER .15f
 #define VELOCITY_INC 10
 #define VELOCITY_INC_SPIN_DASH 20
-#define FRICTION 50
+#define FRICTION 25
 #define MIN_ATK_VELOCITY 10
 
 Player::Player(){}
@@ -241,94 +241,6 @@ void Player::setFrictionForces(float timeElapsed){
     if(isMoving || isChargingSpinDash)return;
     decVelocity(FRICTION * timeElapsed);
 }
-
-
-
-// bool Player::isColliding(sf::FloatRect box){
-//     return currentSprite.getGlobalBounds().intersects(box);
-// }
-
-// int Player::isMovementColliding(sf::FloatRect box){
-//     sf::FloatRect *movementBoundingBox = getMovementRect();
-//     if(!movementBoundingBox->intersects(box))return NO_COLLISION;
-
-//     //Collision is on top of the box
-//     float topDelta = (lastBoundingBox.top + lastBoundingBox.height) - box.top;
-//     //Collision is on left of the box
-//     float leftDelta = (lastBoundingBox.left + lastBoundingBox.width) - box.left;
-//     //Collision is on right of the box
-//     float rightDelta = lastBoundingBox.left - (box.left + box.width);
-//     //Collision is on bottom of the box
-//     float botDelta = lastBoundingBox.top - (box.top + box.height);
-
-//     std::cout << topDelta << " "<< botDelta << " "<< leftDelta << " "<< rightDelta << std::endl;
-
-//     if(abs(topDelta) < abs(leftDelta) && abs(topDelta) < abs(rightDelta)){
-//         return TOP_COLLISION;
-//     }
-
-//     return RIGHT_COLLISION;
-// }
-
-
-
-// bool Player::handleMovementCollision(sf::FloatRect box){
-//     //Get this movement
-//     int dirMul = 1;
-//     sf::FloatRect *leftBox, *rightBox;
-//     if(box.left < lastBoundingBox.left){
-//          leftBox = &box;
-//          rightBox = &lastBoundingBox;
-//          dirMul = -1;
-//          std::cout<<"Player is right, box is left"<<std::endl;
-//     }else{
-//         leftBox = &lastBoundingBox;
-//         rightBox = &box;
-//          std::cout<<"Player is left, box is right"<<std::endl;
-//     }
-    
-//     float offset = rightBox->left - (leftBox -> left + leftBox -> width);
-//     std::cout<<"Offset :"<<offset<<std::endl;
-//     //If the tile is closser (movementX less than previous, store it)
-//     if(abs(offset) < abs(moveX)){
-//         moveX =  offset * dirMul;
-//         std::cout<<"new moveX "<<moveX<<std::endl;
-//     }
-    
-// }
-
-// /**
-//  * TODO do custom collide box
-//  **/
-// bool Player::handleWallCollision(sf::FloatRect box){
-//     sf::FloatRect playerBox = currentSprite.getGlobalBounds();
-//     //Collision is on top of the box
-//     float topDelta = (playerBox.top + playerBox.height) - box.top;
-//     //Collision is on left of the box
-//     float leftDelta = (playerBox.left + playerBox.width) - box.left;
-//     //Collision is on right of the box
-//     float rightDelta = playerBox.left - (box.left + box.width);
-//     //Collision is on bottom of the box
-//     float botDelta = playerBox.top - (box.top + box.height);
-
-//     if(topDelta > 0 && topDelta < box.height / COLLISION_DETECTION_DIVIDER){
-//         moveY = -topDelta;
-//         jumpTimer = 0;
-//     }
-
-//     if(leftDelta > 0 && leftDelta < box.width / COLLISION_DETECTION_DIVIDER){
-//         moveX = -leftDelta;
-//     }
-
-//     if(rightDelta < 0 && rightDelta > -(box.width / COLLISION_DETECTION_DIVIDER) && topDelta > box.width / COLLISION_DETECTION_DIVIDER){
-//         moveX = -rightDelta;
-//     }
-
-//     if(botDelta < 0 && botDelta > -(box.height / COLLISION_DETECTION_DIVIDER)){
-//         //FIXME abnormal *2
-//         moveY = -botDelta*2;
-//     }
-// }
 
 void Player::getHit(){
     //Don't damage in iframe
