@@ -7,7 +7,6 @@
 #include <sstream>
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "AnimatedSprite.hpp"
 #include "Player.hpp"
 #include <fstream>
 #include <string>
@@ -144,8 +143,15 @@ int main(){
 	pikaSkullBashL[3].loadFromImage(pikaImages,sf::IntRect(149,272,52,30));
 	player.createNewAnimation(PIKA_SKULLBASH_L,4,0.5f,pikaSkullBashL);
 
+	sf::Texture pikaChargeR[1];
+	pikaChargeR[0].loadFromImage(pikaImages,sf::IntRect(127,192,52,30));
+	player.createNewAnimation(PIKA_CHARGE_R,1,0.5f,pikaChargeR);
+
+	sf::Texture pikaChargeL[1];
+	pikaChargeL[0].loadFromImage(pikaImages,sf::IntRect(198,193,52,30));
+	player.createNewAnimation(PIKA_CHARGE_L,1,0.5f,pikaChargeL);
+
 	/*Set default animation*/
-	player.currentAnimation = &player.animations[0];
 	player.getCurrentSprite().move(60,100);
 	player.lastBoundingBox = player.currentSprite.getGlobalBounds();
 	/*	*/

@@ -10,7 +10,7 @@ class AnimatedSprite{
 		float timeElapsed = 0;
 		int frameCount = 0;
 		//In seconds
-		float animatioDuration;
+		float animationDuration;
 		sf::Texture frames[MAX_FRAME_ANIM];
 		AnimatedSprite();
 		AnimatedSprite(std::string name, int nbFrames, float animTime, sf::Texture textures[]);

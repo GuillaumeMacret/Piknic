@@ -2,6 +2,7 @@
 #include "AnimatedSprite.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <map>
 
 #define I_FRAME_DUR 0.5f
 
@@ -19,7 +20,7 @@ class Player{
         float velocity=0, xMovementCollision = 0;
         sf::Sprite currentSprite;
         AnimatedSprite *currentAnimation;
-        std::vector<AnimatedSprite> animations;
+        std::map<std::string, AnimatedSprite> animations;
 
         Player();
         sf::Sprite &getCurrentSprite();

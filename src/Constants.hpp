@@ -8,6 +8,8 @@
 #define PIKA_IDLE_R "Pika idle right"
 #define PIKA_SKULLBASH_R "Pika skullbash right"
 #define PIKA_SKULLBASH_L "Pika skullbash left"
+#define PIKA_CHARGE_L "Pika charge left"
+#define PIKA_CHARGE_R "Pika charge right"
 
 #define NO_COLLISION 0
 #define TOP_COLLISION 1

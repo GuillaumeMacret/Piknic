@@ -1,3 +1,4 @@
+#include <map>
 #include <SFML/Audio.hpp>
 #include <cmath>
 #include <stdlib.h>
@@ -15,9 +16,7 @@
 #define FRICTION 50
 #define MIN_ATK_VELOCITY 10
 
-Player::Player(){
-    
-}
+Player::Player(){}
 
 sf::Sprite& Player::getCurrentSprite(){
     return currentSprite;
@@ -29,20 +28,36 @@ void Player::setCurrentSprite(sf::Sprite sprite){
 
 void Player::updateAnimation(float timeElapsed){
     //FIXME This is static => this is bad
-    if(isAttacking){
+    if(isChargingSpinDash){
+        if(facingDirection == 1){
+            if(currentAnimation -> name == PIKA_CHARGE_R){
+                currentAnimation->addTime(timeElapsed);
+            }else{
+                currentAnimation = &animations[PIKA_CHARGE_R];
+                audioPlayer.playChargeSpinDash();
+            }
+        }else{
+            if(currentAnimation -> name == PIKA_CHARGE_L){
+                currentAnimation->addTime(timeElapsed);
+            }else{
+                currentAnimation = &animations[PIKA_CHARGE_L];
+                audioPlayer.playChargeSpinDash();
+            }
+        }
+    }else if(isAttacking){
         if(facingDirection == 1){
             if(currentAnimation -> name == PIKA_SKULLBASH_R){
                 currentAnimation->addTime(timeElapsed);
             }else{
-                currentAnimation=&animations[4];
-                audioPlayer.playAtk();
+                currentAnimation=&animations[PIKA_SKULLBASH_R];
+                if(!isSpinDashing)audioPlayer.playAtk();
             }
         }else{
             if(currentAnimation -> name == PIKA_SKULLBASH_L){
                 currentAnimation->addTime(timeElapsed);
             }else{
-                currentAnimation=&animations[5];
-                audioPlayer.playAtk();
+                currentAnimation=&animations[PIKA_SKULLBASH_L];
+                if(!isSpinDashing)audioPlayer.playAtk();
             }
         }
     }else if(isMoving){
@@ -50,13 +65,13 @@ void Player::updateAnimation(float timeElapsed){
             if(currentAnimation -> name == PIKA_RUN_R){
                 currentAnimation->addTime(timeElapsed);
             }else{
-                currentAnimation = &animations[2];
+                currentAnimation = &animations[PIKA_RUN_R];
             }
         }else{
             if(currentAnimation -> name == PIKA_RUN_L){
                 currentAnimation->addTime(timeElapsed);
             }else{
-                currentAnimation = &animations[3];
+                currentAnimation = &animations[PIKA_RUN_L];
             }
         }
     }else{
@@ -64,13 +79,13 @@ void Player::updateAnimation(float timeElapsed){
             if(currentAnimation->name == PIKA_IDLE_R){
                 currentAnimation->addTime(timeElapsed);
             }else{
-                currentAnimation = &animations[0];
+                currentAnimation = &animations[PIKA_IDLE_R];
             }
         }else{
             if(currentAnimation->name == PIKA_IDLE_L){
                 currentAnimation->addTime(timeElapsed);
             }else{
-                currentAnimation = &animations[1];
+                currentAnimation = &animations[PIKA_IDLE_L];
             }
         }
         
@@ -83,9 +98,8 @@ void Player::updateAnimation(float timeElapsed){
  * Returns the id of the animation
  **/
 int Player::createNewAnimation(std::string name, int nbFrames, float animTime, sf::Texture textures[]){
-    AnimatedSprite newAnim(name, nbFrames, animTime,textures);
-    animations.push_back(newAnim);
-    if(currentAnimation==nullptr)currentAnimation = &animations[0];
+    animations[name] = AnimatedSprite(name, nbFrames, animTime,textures);
+    if(currentAnimation==nullptr)currentAnimation = &animations[name];
 }
 
 void Player::resetForces(){
@@ -115,6 +129,8 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         }else if (!up && velocity > 0 && isChargingSpinDash){// Realease spin dash
             isChargingSpinDash = false;
             isSpinDashing = true;
+            //FIXME group sound playing
+            audioPlayer.playReleaseSpinDash();
         }else if(up){ // spin dash charge
             incVelocity(VELOCITY_INC_SPIN_DASH * timeElapsed);
             isChargingSpinDash = true;
@@ -152,29 +168,6 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
 
     std::cerr<<"vel : "<<velocity<<std::endl;
 
-    //old
-    // if (left){
-    //     facingDirection = -1;
-    //     incVelocity(VELOCITY_INC * timeElapsed);
-    // }
-    // if (right) {
-    //     facingDirection = 1;
-    //     incVelocity(VELOCITY_INC * timeElapsed);
-    // }
-    // if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
-    //     moveY-=JUMP_SPEED * timeElapsed;
-    //     jumpTimer += timeElapsed;
-    //     isJumping = true;
-    // }
-    // if(!up || jumpTimer >= MAXIMUM_JUMP_TIMER ){
-    //     isJumping = false;
-    // }
-    // if(down && velocity > MIN_ATK_VELOCITY){
-    //     isAttacking = true;
-    // }else{
-    //     isAttacking = false;
-    // }
-    
     //Fixme use forces instead
     if(!left && !right){
         isMoving = false;
