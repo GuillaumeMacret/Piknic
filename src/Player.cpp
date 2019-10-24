@@ -166,7 +166,7 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
     // }
     // else isMoving = true;
 
-    std::cerr<<"vel : "<<velocity<<std::endl;
+    // std::cerr<<"vel : "<<velocity<<std::endl;
 
     //Fixme use forces instead
     if(!left && !right){

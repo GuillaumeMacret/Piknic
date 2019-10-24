@@ -16,7 +16,7 @@
 #define MAX_TILE_ITEMS NB_TILEMAP_WIDTH * NB_TILEMAP_HEIGHT
 #define TILE_SIZE 48
 #define MAX_ENEMIES 32
-#define NB_LEVELS 2
+#define NB_LEVELS 3
 
 
 void setSprite(sf::Sprite &sprite, sf::Texture &texture,sf::IntRect bounds){
@@ -51,6 +51,8 @@ void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collis
 		rings.push_back(new sf::Sprite());
 		rings.back()->move(it->x,it->y);
 	}
+
+	loadTextures = true;
 
 	std::cerr<<"Loaded level "<<levelId<<std::endl;
 }
@@ -424,6 +426,7 @@ int main(){
 		window.setView(view);
 		window.clear();
 		window.draw(bgSprite);
+		std::cerr<<"I frame counter"<<player.IframeCounter<<std::endl;
 		if(player.IframeCounter <= I_FRAME_DUR) player.currentSprite.setColor(sf::Color(255, 255, 255, 128));
 		window.draw(player.getCurrentSprite());
 		player.currentSprite.setColor(sf::Color(255,255,255,255));
