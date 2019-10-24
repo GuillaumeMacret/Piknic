@@ -14,14 +14,12 @@ class Player{
 
         PlayerAudio audioPlayer;
         sf::FloatRect lastBoundingBox;
-        bool isMoving = false, isJumping = false,isAttacking = false;
+        bool isMoving = false, isJumping = false,isAttacking = false, isChargingSpinDash = false, isSpinDashing = false;
         int facingDirection = 1;
         float velocity=0, xMovementCollision = 0;
         sf::Sprite currentSprite;
         AnimatedSprite *currentAnimation;
         std::vector<AnimatedSprite> animations;
-        int createNewAnimation(std::string name, int nbFrames, float animTime, sf::Texture textures[]);
-        void updateAnimation(float timeElapsed);
 
         Player();
         sf::Sprite &getCurrentSprite();
@@ -29,6 +27,7 @@ class Player{
         void resetForces();
         void setKeyboardForces(float timeElapsed, bool up,bool down, bool left, bool right);
         void setVelocityInMoveX();
+        void hasTouchedGround();
         void setFrictionForces(float timeElapsed);
         void setGravityForces(float timeElapsed);
         void doMove();
@@ -46,4 +45,6 @@ class Player{
         void updateIframe(float timeElapsed);
         void incVelocity(float i);
         void decVelocity(float i);
+        int createNewAnimation(std::string name, int nbFrames, float animTime, sf::Texture textures[]);
+        void updateAnimation(float timeElapsed);
 };

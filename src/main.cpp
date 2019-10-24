@@ -198,21 +198,6 @@ int main(){
 
 		if(maps[i]->width > maxWidth)maxWidth = maps[i]->width;
 		if(maps[i]->heigth > maxHeight)maxHeight = maps[i]->heigth;
-
-		// sf::Sprite thisLevelSprites[maps[i]->width][maps[i]->heigth];
-		// for(int j = 0;j < maps[i]->width;++j){
-		// 	for(int j = 0;j < maps[i]->heigth;j++){
-		// 		thisLevelSprites[i][j] = tiles[maps[i]->layers[0]->matrix[i][j] -1];
-		// 		thisLevelSprites[i][j].move(TILE_SIZE * i, TILE_SIZE * j);
-
-		// 		levelsSprites.push_back(thisLevelSprites);
-	 	// 		/*
-		// 		if(maps[i]->layers[0]->matrix[i][j] != 0){
-		// 			collisionTiles[collisionTilesLength++] = &levelSprites[i][j];
-		// 		}
-		// 		*/
-	 	// 	}
-		// }
 	}
 
 	std::cerr<<maxWidth<<" "<<maxHeight<<std::endl;
@@ -267,11 +252,13 @@ int main(){
 				if(event.key.code == sf::Keyboard::Left) leftFlag = true;
 				else if (event.key.code == sf::Keyboard::Right) rightFlag = true;
 				else if (event.key.code == sf::Keyboard::Up) upFlag = true;
+				else if (event.key.code == sf::Keyboard::Z) upFlag = true;
 				else if (event.key.code == sf::Keyboard::Down) downFlag = true;
 			}else if (event.type == sf::Event::KeyReleased){
 				if(event.key.code == sf::Keyboard::Left) leftFlag = false;
 				else if (event.key.code == sf::Keyboard::Right) rightFlag = false;
 				else if (event.key.code == sf::Keyboard::Up) upFlag = false;
+				else if (event.key.code == sf::Keyboard::Z) upFlag = false;
 				else if (event.key.code == sf::Keyboard::Down) downFlag = false;
 			}
 		}
@@ -345,9 +332,9 @@ int main(){
     		}
 		}
 		if(collisionReadjustY < BIG_FLOAT){
-			std::cerr << "Readjusting y by " << collisionReadjustY * dirMulY<<std::endl;
+			// std::cerr << "Readjusting y by " << collisionReadjustY * dirMulY<<std::endl;
 			player.moveY += collisionReadjustY * dirMulY;
-			if(dirMulY == -1) player.jumpTimer=0;
+			if(dirMulY == -1) player.hasTouchedGround();
 		}
 
 		//std::cerr<<"Vector move after : "<<player.moveX<<", "<<player.moveY<<std::endl;

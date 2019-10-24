@@ -11,6 +11,7 @@
 #define JUMP_SPEED 1000
 #define MAXIMUM_JUMP_TIMER .15f
 #define VELOCITY_INC 10
+#define VELOCITY_INC_SPIN_DASH 20
 #define FRICTION 50
 #define MIN_ATK_VELOCITY 10
 
@@ -102,8 +103,39 @@ inline void Player::decVelocity(float i){
     velocity -= i;
     if(velocity < 0) velocity = 0;
 }
+void Player::hasTouchedGround(){
+    jumpTimer = 0;
+}
 
 void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, bool right){
+    if(down){
+        left = right = false;
+        if(velocity > 0 && !isChargingSpinDash){ //roll until can't move
+            isAttacking = true;
+        }else if (!up && velocity > 0 && isChargingSpinDash){// Realease spin dash
+            isChargingSpinDash = false;
+            isSpinDashing = true;
+        }else if(up){ // spin dash charge
+            incVelocity(VELOCITY_INC_SPIN_DASH * timeElapsed);
+            isChargingSpinDash = true;
+        }
+    }else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
+        moveY-=JUMP_SPEED * timeElapsed;
+        jumpTimer += timeElapsed;
+        isJumping = true;
+    }
+    if(velocity <= 0){
+        isSpinDashing = false;
+        isAttacking = false;
+    }
+    if(isSpinDashing || isChargingSpinDash){
+        isAttacking = true;
+    }
+
+    if(!up || jumpTimer >= MAXIMUM_JUMP_TIMER ){
+        isJumping = false;
+    }
+
     if (left){
         facingDirection = -1;
         incVelocity(VELOCITY_INC * timeElapsed);
@@ -112,19 +144,36 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         facingDirection = 1;
         incVelocity(VELOCITY_INC * timeElapsed);
     }
-    if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
-        moveY-=JUMP_SPEED * timeElapsed;
-        jumpTimer += timeElapsed;
-        isJumping = true;
-    }
-    if(!up || jumpTimer >= MAXIMUM_JUMP_TIMER ){
-        isJumping = false;
-    }
-    if(down && velocity > MIN_ATK_VELOCITY){
-        isAttacking = true;
-    }else{
-        isAttacking = false;
-    }
+
+    // if(velocity == 0){
+    //     isMoving = false;
+    // }
+    // else isMoving = true;
+
+    std::cerr<<"vel : "<<velocity<<std::endl;
+
+    //old
+    // if (left){
+    //     facingDirection = -1;
+    //     incVelocity(VELOCITY_INC * timeElapsed);
+    // }
+    // if (right) {
+    //     facingDirection = 1;
+    //     incVelocity(VELOCITY_INC * timeElapsed);
+    // }
+    // if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
+    //     moveY-=JUMP_SPEED * timeElapsed;
+    //     jumpTimer += timeElapsed;
+    //     isJumping = true;
+    // }
+    // if(!up || jumpTimer >= MAXIMUM_JUMP_TIMER ){
+    //     isJumping = false;
+    // }
+    // if(down && velocity > MIN_ATK_VELOCITY){
+    //     isAttacking = true;
+    // }else{
+    //     isAttacking = false;
+    // }
     
     //Fixme use forces instead
     if(!left && !right){
@@ -138,6 +187,7 @@ void Player::setVelocityInMoveX(){
 }
 
 void Player::doVelocityMove(){
+    if(isChargingSpinDash)return;
     lastBoundingBox = sf::FloatRect(currentSprite.getGlobalBounds());
 	// std::cerr<<"Vector moving : "<<moveX<<", "<<moveY<<std::endl;
     currentSprite.move(sf::Vector2f(moveX,moveY));
@@ -195,7 +245,8 @@ void Player::setGravityForces(float timeElapsed){
 }
 
 void Player::setFrictionForces(float timeElapsed){
-    if(!isMoving)decVelocity(FRICTION * timeElapsed);
+    if(isMoving || isChargingSpinDash)return;
+    decVelocity(FRICTION * timeElapsed);
 }
 
 
