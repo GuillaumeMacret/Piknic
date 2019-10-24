@@ -1,7 +1,24 @@
-- Check if calling delete on enemy is needed
-- Animations (enemies)
-- Level design
-- Ring handing
-- Anim for Ifram
-- Plateformes traversables
+# TODO
+
+## Vital
+
 - Bug spin dash volant
+- **Level design (pref do backgournd layer & 1 way platform b4)**
+- I-frame anim bug???
+
+
+## Very important
+
+- **Plateformes traversables**
+- **Load background layer**
+
+
+## Cool stuff
+
+- Show speed
+- Ring spread
+- Animations (enemies)
+
+## Misc
+
+- Check if calling delete on enemy is needed
