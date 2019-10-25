@@ -344,10 +344,13 @@ int main(){
 
 		//Y-Collision
 		collisionReadjustY= BIG_FLOAT;
+		// Predict movement
+		sf::FloatRect futurRect = player.currentSprite.getGlobalBounds();
+		futurRect.top += player.moveY;
+		movementRect = getContainingRect(player.currentSprite.getGlobalBounds(),futurRect);
+		
+		/// Collision with full tiles
 		for(int i = 0;i < collisionTiles.size();++i){
-			sf::FloatRect futurRect = player.currentSprite.getGlobalBounds();
-			futurRect.top += player.moveY;
-			movementRect = getContainingRect(player.currentSprite.getGlobalBounds(),futurRect);
 			if(movementRect->intersects(collisionTiles[i]->getGlobalBounds())){
 				sf::FloatRect intersection;
 				movementRect->intersects(collisionTiles[i]->getGlobalBounds(),intersection);
@@ -361,6 +364,24 @@ int main(){
 				if(collisionReadjustY > yOffset)collisionReadjustY = yOffset;
     		}
 		}
+		/// Collision with top tiles TODO
+		for(int i = 0;i < levelsTopSprites[currentLevel].size();++i){
+			if(movementRect->intersects(levelsTopSprites[currentLevel][i]->getGlobalBounds())){
+				sf::FloatRect intersection;
+				movementRect->intersects(levelsTopSprites[currentLevel][i]->getGlobalBounds(),intersection);
+
+				float yOffset = intersection.height;
+				//If top collision AND the tile is closer (movementY less than previous, store it)
+				// std::cerr<<movementRect->top <<" "<< levelsTopSprites[currentLevel][i]->getGlobalBounds().top<< " >> "<< (movementRect->top < levelsTopSprites[currentLevel][i]->getGlobalBounds().top) << std::endl;
+				// std::cerr<<collisionReadjustY << " "<< yOffset<<">>"<<(collisionReadjustY > yOffset)<<std::endl;
+				//FIXME 2nd condition might fuck up with low FPS
+				if(movementRect->top < levelsTopSprites[currentLevel][i]->getGlobalBounds().top && yOffset <= GRAVITY * (averageTime * 2) && collisionReadjustY > yOffset){
+					collisionReadjustY = yOffset;
+					dirMulY = -1;
+				}
+    		}
+		}
+		///Set Y adjust
 		if(collisionReadjustY < BIG_FLOAT){
 			// std::cerr << "Readjusting y by " << collisionReadjustY * dirMulY<<std::endl;
 			player.moveY += collisionReadjustY * dirMulY;
@@ -480,7 +501,7 @@ int main(){
 		player.currentSprite.setColor(sf::Color(255,255,255,255));
 
 		/*Debug*/
-		/*
+		
 		sf::RectangleShape rectMv(sf::Vector2f(movementRect->width,movementRect->height));
 		rectMv.move(sf::Vector2f(movementRect->left,movementRect->top));
 		rectMv.setFillColor(sf::Color(255,0,0,200));
@@ -498,7 +519,7 @@ int main(){
 		exitRect.move(sf::Vector2f(maps[currentLevel]->exit.left, maps[currentLevel]->exit.top));
 		exitRect.setFillColor(sf::Color(100,100,100,200));
 		window.draw(exitRect);
-		*/
+		
 		/*End Debug*/
 
 
