@@ -9,8 +9,8 @@
 
 ## Very important
 
-- **Plateformes traversables**
-- **Load background layer**
+- Use matrix to test less collisions
+- Find why fps influences speed (apparently make velocity increaes faster)
 
 
 ## Cool stuff

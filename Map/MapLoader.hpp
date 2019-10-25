@@ -57,6 +57,19 @@ Layer *createTopCollisionLayer(RSJresource layerResource){
     return layer;
 }
 
+Layer *createLayerFromJson(RSJresource layerResource){
+    std::cerr<<"Parsing background layer"<<std::endl;
+    std::string layerString = layerResource["data"].as<std::string>();layerString = layerString.substr(1,layerString.length()-2);
+    
+    int width = layerResource["width"].as<int>();
+    int heigth = layerResource["height"].as<int>();
+
+    Layer *layer = createLayer(layerString,width,heigth);
+    layer->name = layerResource["name"].as<std::string>();
+
+    return layer;
+}
+
 Layer *createEnemiesBoundLayer(RSJresource layerResource){
     std::cerr<<"Parsing enemies collision layer"<<std::endl;
     std::string layerString = layerResource["data"].as<std::string>();layerString = layerString.substr(1,layerString.length()-2);
@@ -127,6 +140,8 @@ Map *createMapFromJSON(std::string path){
             newMap->layers.push_back(createEnemiesBoundLayer(layerResource));
         }else if(layerResource["name"].as<std::string>() == "TopCollisionTiles"){
             newMap->layers.push_back(createTopCollisionLayer(layerResource));
+        }else if(layerResource["name"].as<std::string>() == "Background"){
+            newMap->layers.push_back(createLayerFromJson(layerResource));
         }else{
             std::cout<< layerResource["name"].as<std::string>()<<" no function to handle that layer"<<std::endl;
         }

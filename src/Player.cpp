@@ -7,14 +7,13 @@
 #include "Player.hpp"
 #include <iostream>
 
-#define SPEED 500
-#define GRAVITY 500
-#define JUMP_SPEED 1000
+#define SPEED 500.0f
+#define JUMP_SPEED 1000.0f
 #define MAXIMUM_JUMP_TIMER .15f
-#define VELOCITY_INC 10
-#define VELOCITY_INC_SPIN_DASH 20
-#define FRICTION 25
-#define MIN_ATK_VELOCITY 10
+#define VELOCITY_INC 10.0f
+#define VELOCITY_INC_SPIN_DASH 20.0f
+#define FRICTION 25.0f
+#define MIN_ATK_VELOCITY 10.0f
 
 Player::Player(){}
 

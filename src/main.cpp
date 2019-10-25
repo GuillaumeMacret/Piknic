@@ -63,6 +63,7 @@ void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collis
 
 int main(){
 	sf::RenderWindow window(sf::VideoMode(1280,720),"Piknic!");
+	//FIXME issue with speed and framerate
 	window.setFramerateLimit(60);
 
 	GameAudio gameAudio;
@@ -179,24 +180,27 @@ int main(){
 
 	/*Creating levels matrix*/
 	Map *maps[NB_LEVELS];
-	std::vector<std::vector<sf::Sprite*>> levelsSprites, levelsTopSprites , levelsEnemiesCollSprites;
+	std::vector<std::vector<sf::Sprite*>> levelsSprites, levelsTopSprites , levelsEnemiesCollSprites, levelsBackgroundSprites;
 
 	float maxWidth = 0, maxHeight = 0;
 
 	for(int i = 0; i < NB_LEVELS; ++i){
 		maps[i] = createMapFromJSON("Map/level" + std::to_string(i) + ".json");
-		std::vector<sf::Sprite*> thisLevelSpriteVec, ennemiesColSpriteVec, thisLevelTopSpriteVec;
-		int collisionLayerId = -1, topCollisionLayerId = -1, enemyCollisionLayerId = -1;
+		std::vector<sf::Sprite*> thisLevelSpriteVec, ennemiesColSpriteVec, thisLevelTopSpriteVec, thisLevelBackgroundSpriteVec;
+
+		//TODO Background layer
+
+		int collisionLayerId = -1, topCollisionLayerId = -1, enemyCollisionLayerId = -1, backgroundTilesLayerId = -1;
 		for(int j = 0; j < maps[i]->layers.size(); ++j){
 			std::cerr<<"Layer Name : "<<maps[i]->layers[j]->name<<std::endl;
 			if(maps[i]->layers[j]->name == "CollisionTiles")collisionLayerId = j;
 			if(maps[i]->layers[j]->name == "TopCollisionTiles")topCollisionLayerId = j;
 			if(maps[i]->layers[j]->name == "EnemyCollision")enemyCollisionLayerId = j;
+			if(maps[i]->layers[j]->name == "Background")backgroundTilesLayerId = j;
 		}
-		std::cerr<<collisionLayerId<<' ' << topCollisionLayerId << " "<< enemyCollisionLayerId<<std::endl;
+		std::cerr<<collisionLayerId<<' ' << topCollisionLayerId << " "<< enemyCollisionLayerId<<" "<<backgroundTilesLayerId<<std::endl;
 		for(int j = 0;j < maps[i]->width;++j){
 			for(int k = 0;k < maps[i]->heigth;++k){
-				//TODO use names instead of numbers
 				/*Overall collision Layer*/
 				if(collisionLayerId >= 0 && !maps[i]->layers[collisionLayerId]->matrix[j][k] -1 == -1){
 					sf::Sprite *sprt = new sf::Sprite(tiles[maps[i]->layers[collisionLayerId]->matrix[j][k] -1]);
@@ -210,6 +214,13 @@ int main(){
 					thisLevelTopSpriteVec.push_back(sprt);
 					thisLevelTopSpriteVec.back()->move(TILE_SIZE *j, TILE_SIZE * k);
 				}
+				
+				/*BG layer*/
+				if(backgroundTilesLayerId >= 0 && !maps[i]->layers[backgroundTilesLayerId]->matrix[j][k] -1 == -1){
+					sf::Sprite *sprt = new sf::Sprite(tiles[maps[i]->layers[backgroundTilesLayerId]->matrix[j][k] -1]);
+					thisLevelBackgroundSpriteVec.push_back(sprt);
+					thisLevelBackgroundSpriteVec.back()->move(TILE_SIZE *j, TILE_SIZE * k);
+				}
 
 				/*Enemy collision layer*/
 				if(enemyCollisionLayerId >= 0 && !maps[i]->layers[enemyCollisionLayerId]->matrix[j][k] -1 == -1){
@@ -220,10 +231,11 @@ int main(){
 			}
 		}
 
-		std::cerr<<"Nb of collision tiles : "<<thisLevelSpriteVec.size()<<std::endl;
+		std::cerr<<"Nb of bg tiles : "<<thisLevelBackgroundSpriteVec.size()<<std::endl;
 
 		levelsSprites.push_back(thisLevelSpriteVec);
 		levelsTopSprites.push_back(thisLevelTopSpriteVec);
+		levelsBackgroundSprites.push_back(thisLevelBackgroundSpriteVec);
 		levelsEnemiesCollSprites.push_back(ennemiesColSpriteVec);
 
 		if(maps[i]->width > maxWidth)maxWidth = maps[i]->width;
@@ -479,6 +491,10 @@ int main(){
 		for(int i = 0; i < levelsTopSprites[currentLevel].size(); ++i){
 			window.draw(*levelsTopSprites[currentLevel][i]);
 		}
+		for(int i = 0; i < levelsBackgroundSprites[currentLevel].size(); ++i){
+			window.draw(*levelsBackgroundSprites[currentLevel][i]);
+		}
+
 		
 		for(std::vector<Enemy *>::iterator ptr = enemies.begin(); ptr < enemies.end();++ptr){
 			if(!(*ptr)->spriteInited){

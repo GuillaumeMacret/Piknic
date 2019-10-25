@@ -1,6 +1,6 @@
-#define GRAVITY 500
+#define GRAVITY 500.0f
 #define COLLISION_DETECTION_DIVIDER 5
-#define MAX_VELOCITY 25
+#define MAX_VELOCITY 25.0f
 
 #define PIKA_RUN_L "Pika running left"
 #define PIKA_IDLE_L "Pika idle left"
