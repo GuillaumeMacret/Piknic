@@ -24,11 +24,15 @@ void setSprite(sf::Sprite &sprite, sf::Texture &texture,sf::IntRect bounds){
 	sprite.setTextureRect(bounds);
 }
 
-void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collisionTiles, std::vector<std::vector<sf::Sprite*>> &levelsSprites, Player &player, sf::FloatRect &start, std::vector<Enemy *> &enemies,const std::vector<Point> &enemiesPos,std::vector<sf::Sprite *>&enemiesCollisionTiles, std::vector<std::vector<sf::Sprite*>>&ennemiesColSpriteVec,sf::View &view, std::vector<sf::Sprite *>&rings,std::vector<Point> &ringPos){
+void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collisionTiles, std::vector<std::vector<sf::Sprite*>> &levelsSprites, std::vector<sf::Sprite*> &topCollisionTiles, std::vector<std::vector<sf::Sprite*>> &levelsTopSprites, Player &player, sf::FloatRect &start, std::vector<Enemy *> &enemies,const std::vector<Point> &enemiesPos,std::vector<sf::Sprite *>&enemiesCollisionTiles, std::vector<std::vector<sf::Sprite*>>&ennemiesColSpriteVec,sf::View &view, std::vector<sf::Sprite *>&rings,std::vector<Point> &ringPos){
 	/*Collision tiles*/
 	collisionTiles.clear();
 	for(int j = 0;j < levelsSprites[levelId].size();++j){
 			if(levelsSprites[levelId][j])collisionTiles.push_back(levelsSprites[levelId][j]);
+	}
+	topCollisionTiles.clear();
+	for(int j = 0;j < levelsTopSprites[levelId].size();++j){
+			if(levelsTopSprites[levelId][j])topCollisionTiles.push_back(levelsTopSprites[levelId][j]);
 	}
 
 	/*Player start pos*/
@@ -69,7 +73,8 @@ int main(){
     	throw std::runtime_error("ressources/Go-Bold.ttf");
 	}
 
-	std::vector<sf::Sprite *>collisionTiles;
+	//TODO can delete this ? Use maps[currentlevel].collisiontiles
+	std::vector<sf::Sprite *>collisionTiles, topCollisionTiles;
 
 	int currentLevel = 0;
 
@@ -174,34 +179,51 @@ int main(){
 
 	/*Creating levels matrix*/
 	Map *maps[NB_LEVELS];
-	std::vector<std::vector<sf::Sprite*>> levelsSprites;
-	std::vector<std::vector<sf::Sprite*>> levelsEnemiesCollSprites;
+	std::vector<std::vector<sf::Sprite*>> levelsSprites, levelsTopSprites , levelsEnemiesCollSprites;
 
 	float maxWidth = 0, maxHeight = 0;
 
 	for(int i = 0; i < NB_LEVELS; ++i){
 		maps[i] = createMapFromJSON("Map/level" + std::to_string(i) + ".json");
-		std::vector<sf::Sprite*> thisLevelSpriteVec, ennemiesColSpriteVec;
+		std::vector<sf::Sprite*> thisLevelSpriteVec, ennemiesColSpriteVec, thisLevelTopSpriteVec;
+		int collisionLayerId = -1, topCollisionLayerId = -1, enemyCollisionLayerId = -1;
+		for(int j = 0; j < maps[i]->layers.size(); ++j){
+			std::cerr<<"Layer Name : "<<maps[i]->layers[j]->name<<std::endl;
+			if(maps[i]->layers[j]->name == "CollisionTiles")collisionLayerId = j;
+			if(maps[i]->layers[j]->name == "TopCollisionTiles")topCollisionLayerId = j;
+			if(maps[i]->layers[j]->name == "EnemyCollision")enemyCollisionLayerId = j;
+		}
+		std::cerr<<collisionLayerId<<' ' << topCollisionLayerId << " "<< enemyCollisionLayerId<<std::endl;
 		for(int j = 0;j < maps[i]->width;++j){
 			for(int k = 0;k < maps[i]->heigth;++k){
 				//TODO use names instead of numbers
 				/*Overall collision Layer*/
-				if(!maps[i]->layers[0]->matrix[j][k] -1 == -1){
-					sf::Sprite *sprt = new sf::Sprite(tiles[maps[i]->layers[0]->matrix[j][k] -1]);
+				if(collisionLayerId >= 0 && !maps[i]->layers[collisionLayerId]->matrix[j][k] -1 == -1){
+					sf::Sprite *sprt = new sf::Sprite(tiles[maps[i]->layers[collisionLayerId]->matrix[j][k] -1]);
 					thisLevelSpriteVec.push_back(sprt);
-					thisLevelSpriteVec[thisLevelSpriteVec.size()-1]->move(TILE_SIZE *j, TILE_SIZE * k);
+					thisLevelSpriteVec.back()->move(TILE_SIZE *j, TILE_SIZE * k);
+				}
+
+				/*Top only collision layer*/
+				if(topCollisionLayerId >= 0 && !maps[i]->layers[topCollisionLayerId]->matrix[j][k] -1 == -1){
+					sf::Sprite *sprt = new sf::Sprite(tiles[maps[i]->layers[topCollisionLayerId]->matrix[j][k] -1]);
+					thisLevelTopSpriteVec.push_back(sprt);
+					thisLevelTopSpriteVec.back()->move(TILE_SIZE *j, TILE_SIZE * k);
 				}
 
 				/*Enemy collision layer*/
-				if(!maps[i]->layers[1]->matrix[j][k] -1 == -1){
-					sf::Sprite *sprt = new sf::Sprite(tiles[maps[i]->layers[1]->matrix[j][k] -1]);
+				if(enemyCollisionLayerId >= 0 && !maps[i]->layers[enemyCollisionLayerId]->matrix[j][k] -1 == -1){
+					sf::Sprite *sprt = new sf::Sprite(tiles[maps[i]->layers[enemyCollisionLayerId]->matrix[j][k] -1]);
 					ennemiesColSpriteVec.push_back(sprt);
-					ennemiesColSpriteVec[ennemiesColSpriteVec.size()-1]->move(TILE_SIZE *j, TILE_SIZE * k);
+					ennemiesColSpriteVec.back()->move(TILE_SIZE *j, TILE_SIZE * k);
 				}
 			}
 		}
 
+		std::cerr<<"Nb of collision tiles : "<<thisLevelSpriteVec.size()<<std::endl;
+
 		levelsSprites.push_back(thisLevelSpriteVec);
+		levelsTopSprites.push_back(thisLevelTopSpriteVec);
 		levelsEnemiesCollSprites.push_back(ennemiesColSpriteVec);
 
 		if(maps[i]->width > maxWidth)maxWidth = maps[i]->width;
@@ -217,7 +239,7 @@ int main(){
 	bool loadTexture = true;
 
 	/*Loading 1st level */
-	loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
+	loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
 
 	/*Gameloop*/
 	bool upFlag,downFlag,leftFlag,rightFlag;
@@ -394,7 +416,7 @@ int main(){
 
 		if(player.getCurrentSprite().getGlobalBounds().intersects(maps[currentLevel]->exit)){
 			++currentLevel %= NB_LEVELS;
-			loadLevel(loadTexture,currentLevel,collisionTiles,levelsSprites,player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
+			loadLevel(loadTexture,currentLevel,collisionTiles,levelsSprites, topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
 		}
 
 		float playerX = player.currentSprite.getGlobalBounds().left + (player.currentSprite.getGlobalBounds().width/2);
@@ -426,17 +448,17 @@ int main(){
 		window.setView(view);
 		window.clear();
 		window.draw(bgSprite);
-		std::cerr<<"I frame counter"<<player.IframeCounter<<std::endl;
-		if(player.IframeCounter <= I_FRAME_DUR) player.currentSprite.setColor(sf::Color(255, 255, 255, 128));
-		window.draw(player.getCurrentSprite());
-		player.currentSprite.setColor(sf::Color(255,255,255,255));
+		// std::cerr<<"I frame counter"<<player.IframeCounter<<std::endl;
 		//TODO may need to set
 		for(int i = 0; i < levelsSprites[currentLevel].size(); ++i){
-			//FIXME When having an empty tile, calls draw on null, try to avoid that
-			if(levelsSprites[currentLevel][i]){
+			// if(levelsSprites[currentLevel][i]){
 				window.draw(*levelsSprites[currentLevel][i]);
-			}
+			// }
 		}
+		for(int i = 0; i < levelsTopSprites[currentLevel].size(); ++i){
+			window.draw(*levelsTopSprites[currentLevel][i]);
+		}
+		
 		for(std::vector<Enemy *>::iterator ptr = enemies.begin(); ptr < enemies.end();++ptr){
 			if(!(*ptr)->spriteInited){
 				setSprite((*ptr)->currentSprite,enemiesSpriteSheet,sf::IntRect(6,91,42,31));
@@ -452,6 +474,10 @@ int main(){
 			}
 			window.draw(**it);
 		}
+
+		if(player.IframeCounter <= I_FRAME_DUR) player.currentSprite.setColor(sf::Color(255, 255, 255, 128));
+		window.draw(player.getCurrentSprite());
+		player.currentSprite.setColor(sf::Color(255,255,255,255));
 
 		/*Debug*/
 		/*
