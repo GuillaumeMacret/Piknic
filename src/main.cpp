@@ -296,6 +296,7 @@ int main(){
 				else if (event.key.code == sf::Keyboard::Up) upFlag = true;
 				else if (event.key.code == sf::Keyboard::Z) upFlag = true;
 				else if (event.key.code == sf::Keyboard::Down) downFlag = true;
+				else if (event.key.code == sf::Keyboard::R) loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
 			}else if (event.type == sf::Event::KeyReleased){
 				if(event.key.code == sf::Keyboard::Left) leftFlag = false;
 				else if (event.key.code == sf::Keyboard::Right) rightFlag = false;
@@ -397,7 +398,7 @@ int main(){
 		if(collisionReadjustY < BIG_FLOAT){
 			// std::cerr << "Readjusting y by " << collisionReadjustY * dirMulY<<std::endl;
 			player.moveY += collisionReadjustY * dirMulY;
-			if(dirMulY == -1) player.hasTouchedGround();
+			if(dirMulY == -1 && !player.isJumping) player.hasTouchedGround();
 		}
 
 		//std::cerr<<"Vector move after : "<<player.moveX<<", "<<player.moveY<<std::endl;
@@ -482,7 +483,9 @@ int main(){
 		window.clear();
 		window.draw(bgSprite);
 		// std::cerr<<"I frame counter"<<player.IframeCounter<<std::endl;
-		//TODO may need to set
+		for(int i = 0; i < levelsBackgroundSprites[currentLevel].size(); ++i){
+			window.draw(*levelsBackgroundSprites[currentLevel][i]);
+		}
 		for(int i = 0; i < levelsSprites[currentLevel].size(); ++i){
 			// if(levelsSprites[currentLevel][i]){
 				window.draw(*levelsSprites[currentLevel][i]);
@@ -490,9 +493,6 @@ int main(){
 		}
 		for(int i = 0; i < levelsTopSprites[currentLevel].size(); ++i){
 			window.draw(*levelsTopSprites[currentLevel][i]);
-		}
-		for(int i = 0; i < levelsBackgroundSprites[currentLevel].size(); ++i){
-			window.draw(*levelsBackgroundSprites[currentLevel][i]);
 		}
 
 		
