@@ -460,6 +460,12 @@ int main(){
 			loadLevel(loadTexture,currentLevel,collisionTiles,levelsSprites, topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
 		}
 
+		if(player.currentSprite.getGlobalBounds().top > maps[currentLevel]->heigth * TILE_SIZE){
+			player.fallFromMap();
+		}
+
+		/*Moving "camera" view*/
+
 		float playerX = player.currentSprite.getGlobalBounds().left + (player.currentSprite.getGlobalBounds().width/2);
 		float playerY = player.currentSprite.getGlobalBounds().top + (player.currentSprite.getGlobalBounds().height/2);
 		

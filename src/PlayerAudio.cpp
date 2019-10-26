@@ -10,6 +10,8 @@ PlayerAudio::PlayerAudio(){
     if (!pikaReleaseSpinDash1.loadFromFile(soundPath))std::cerr<<"Cant load "<<soundPath<<std::endl;
     soundPath = "ressources/Sounds/pikaDieHit1.wav";
     if (!pikaDieHit1.loadFromFile(soundPath))std::cerr<<"Cant load "<<soundPath<<std::endl;
+    soundPath = "ressources/Sounds/pikaFall1.wav";
+    if (!pikaFall1.loadFromFile(soundPath))std::cerr<<"Cant load "<<soundPath<<std::endl;
 }
 
 void PlayerAudio::playAtk(){
@@ -29,5 +31,10 @@ void PlayerAudio::playReleaseSpinDash(){
 
 void PlayerAudio::playDieHit(){
     soundsOutput.setBuffer(pikaDieHit1);
+    soundsOutput.play();
+}
+
+void PlayerAudio::playFall(){
+    soundsOutput.setBuffer(pikaFall1);
     soundsOutput.play();
 }

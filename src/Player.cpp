@@ -263,7 +263,10 @@ void Player::getHit(){
 }
 
 void Player::fallFromMap(){
-
+    if(!isDead){
+        audioPlayer.playFall();
+        isDead = true;
+    }
 }
 
 void Player::updateIframe(float timeElapsed){
