@@ -2,16 +2,15 @@
 
 ## Vital
 
-- Bug spin dash volant
 - Level design
 - I-frame anim bug???
-
+- Find why fps influences speed (apparently make velocity increaes faster)
 
 ## Very important
 
+- bug : charge spin dash while falling
 - Use matrix to test less collisions
-- Find why fps influences speed (apparently make velocity increaes faster)
-- Use new coll algo on enemies
+- Use new colision algo on enemies
 
 
 ## Cool stuff

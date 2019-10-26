@@ -66,8 +66,6 @@ void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collis
 
 int main(){
 	sf::RenderWindow window(sf::VideoMode(1280,720),"Piknic!");
-	//FIXME issue with speed and framerate
-	window.setFramerateLimit(60);
 
 	GameAudio gameAudio;
 
@@ -272,7 +270,7 @@ int main(){
 	sf::Clock clock;
 
 	MyClock myclock(60.0f);
-	float deltaTime = 1.0f / 60.0f;
+	float deltaTime;
 	float averageTime = 0;
 
 	sf::Text fpsCountText;
@@ -294,6 +292,9 @@ int main(){
 	speedText.setCharacterSize(24);
 	speedText.setFillColor(sf::Color::White);
 	speedText.setString("__ mph");
+
+	//FIXME issue with speed and framerate
+	window.setFramerateLimit(60);
 
 	while(window.isOpen()){
 

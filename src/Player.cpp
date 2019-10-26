@@ -112,6 +112,8 @@ void Player::resetForces(){
 
 inline void Player::incVelocity(float i){
     velocity += i;
+	std::cerr<<i<<std::endl;
+
     if (velocity > MAX_VELOCITY){
         velocity = MAX_VELOCITY;
     }
@@ -136,16 +138,19 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
             isSpinDashing = true;
             //FIXME group sound playing
             audioPlayer.playReleaseSpinDash();
-        }else if(up){ // spin dash charge
+        }else if(up && jumpTimer == 0){ // spin dash charge
             incVelocity(VELOCITY_INC_SPIN_DASH * timeElapsed);
             isChargingSpinDash = true;
+        }else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
+            moveY-=JUMP_SPEED * timeElapsed;
+            jumpTimer += timeElapsed;
+            isJumping = true;
         }
     }else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
         moveY-=JUMP_SPEED * timeElapsed;
         jumpTimer += timeElapsed;
         isJumping = true;
-    }
-    if(velocity <= 0){
+    }else if(velocity <= 0){
         isSpinDashing = false;
         isAttacking = false;
     }
@@ -158,14 +163,26 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
     }
 
     if (left){
+        if(facingDirection == 1 && !down){
+            isAttacking = false;
+            isSpinDashing = false;
+        }
         facingDirection = -1;
         incVelocity(VELOCITY_INC * timeElapsed);
     }
     if (right) {
+        if(facingDirection == -1 && !down){
+            isAttacking = false;
+            isSpinDashing = false;
+        }
         facingDirection = 1;
         incVelocity(VELOCITY_INC * timeElapsed);
     }
 
+    if(velocity < MIN_ATK_VELOCITY){
+        isSpinDashing = false;
+        isAttacking = false;
+    }
     // if(velocity == 0){
     //     isMoving = false;
     // }
