@@ -7,3 +7,11 @@ Piknic is the first school project of Artois' university video game master in 20
 ``` shell
 make && piknic.app
 ```
+
+## Controls
+
+← / → : Move
+↑ / z : Jump
+↓ (moving) : Skull bash
+↑ / z + ↓ (not moving) : Charge skull bash
+r : Restart level

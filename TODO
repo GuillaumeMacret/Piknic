@@ -3,7 +3,7 @@
 ## Vital
 
 - Bug spin dash volant
-- **Level design (pref do backgournd layer & 1 way platform b4)**
+- Level design
 - I-frame anim bug???
 
 
@@ -11,10 +11,12 @@
 
 - Use matrix to test less collisions
 - Find why fps influences speed (apparently make velocity increaes faster)
+- Update readme
 
 
 ## Cool stuff
 
+- Use new coll algo on enemies
 - Show speed
 - Change charge spin dash sprite
 - Ring spread

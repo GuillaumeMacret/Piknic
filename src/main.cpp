@@ -58,6 +58,9 @@ void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collis
 
 	loadTextures = true;
 
+	player.IframeCounter = 0;
+	player.isDead = false;
+
 	std::cerr<<"Loaded level "<<levelId<<std::endl;
 }
 
@@ -158,6 +161,10 @@ int main(){
 	sf::Texture pikaChargeL[1];
 	pikaChargeL[0].loadFromImage(pikaImages,sf::IntRect(198,193,52,30));
 	player.createNewAnimation(PIKA_CHARGE_L,1,0.5f,pikaChargeL);
+
+	sf::Texture pikaDead[1];
+	pikaDead[0].loadFromImage(pikaImages,sf::IntRect(141,446,58,30));
+	player.createNewAnimation(PIKA_DEAD,1,0.5f,pikaDead);
 
 	/*Set default animation*/
 	player.getCurrentSprite().move(60,100);
@@ -476,7 +483,7 @@ int main(){
 
 		ringCountText.setString(std::to_string(player.ringCounter) + " rings");
 
-		view.setCenter(cameraX,cameraY);
+		if(!player.isDead)view.setCenter(cameraX,cameraY);
 
 		/*Drawing*/
 		window.setView(view);

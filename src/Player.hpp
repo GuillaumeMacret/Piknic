@@ -13,7 +13,7 @@ class Player{
 
         PlayerAudio audioPlayer;
         sf::FloatRect lastBoundingBox;
-        bool isMoving = false, isJumping = false,isAttacking = false, isChargingSpinDash = false, isSpinDashing = false;
+        bool isMoving = false, isJumping = false,isAttacking = false, isChargingSpinDash = false, isSpinDashing = false, isDead = false;
         int facingDirection = 1;
         float velocity=0, xMovementCollision = 0;
         sf::Sprite currentSprite;
@@ -41,6 +41,7 @@ class Player{
         bool handleEnemyCollision(sf::FloatRect box);
         bool handleRingCollision(sf::FloatRect box);
         void getHit();
+        void fallFromMap();
         void updateIframe(float timeElapsed);
         void incVelocity(float i);
         void decVelocity(float i);

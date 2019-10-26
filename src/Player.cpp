@@ -26,8 +26,13 @@ void Player::setCurrentSprite(sf::Sprite sprite){
 }
 
 void Player::updateAnimation(float timeElapsed){
-    //FIXME This is static => this is bad
-    if(isChargingSpinDash){
+    if(isDead){
+        if(currentAnimation -> name == PIKA_DEAD){
+            currentAnimation->addTime(timeElapsed);
+        }else{
+            currentAnimation = &animations[PIKA_DEAD];
+        }
+    }else if(isChargingSpinDash){
         if(facingDirection == 1){
             if(currentAnimation -> name == PIKA_CHARGE_R){
                 currentAnimation->addTime(timeElapsed);
@@ -121,6 +126,7 @@ void Player::hasTouchedGround(){
 }
 
 void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, bool right){
+    if(isDead)return;
     if(down){
         left = right = false;
         if(velocity > 0 && !isChargingSpinDash){ //roll until can't move
@@ -243,15 +249,21 @@ void Player::setFrictionForces(float timeElapsed){
 
 void Player::getHit(){
     //Don't damage in iframe
-    if(IframeCounter <= I_FRAME_DUR)return;
+    if(IframeCounter <= I_FRAME_DUR || isDead)return;
     if(ringCounter <= 0){
         std::cerr<<"Player got gameover"<<std::endl;
+        audioPlayer.playDieHit();
+        isDead = true;
         //exit(0);
     }else{
         //TODO spread rings
         ringCounter = 0;
         IframeCounter = 0;
     }
+}
+
+void Player::fallFromMap(){
+
 }
 
 void Player::updateIframe(float timeElapsed){
