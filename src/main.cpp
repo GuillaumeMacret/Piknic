@@ -60,6 +60,7 @@ void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collis
 
 	player.IframeCounter = 0;
 	player.isDead = false;
+	player.velocity = 0;
 
 	std::cerr<<"Loaded level "<<levelId<<std::endl;
 }
@@ -500,7 +501,7 @@ int main(){
 		player.updateAnimation(averageTime);
 
 		ringCountText.setString(" : " + std::to_string(player.ringCounter));
-		speedText.setString("Speed : " + std::to_string((int)player.velocity * 10) + " Mph");
+		speedText.setString("Speed : " + std::to_string(abs((int)player.velocity) * 10) + " Mph");
 
 		if(!player.isDead)view.setCenter(cameraX,cameraY);
 
