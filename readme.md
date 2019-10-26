@@ -10,8 +10,8 @@ make && piknic.app
 
 ## Controls
 
-← / → : Move
-↑ / z : Jump
-↓ (moving) : Skull bash
-↑ / z + ↓ (not moving) : Charge skull bash
-r : Restart level
+← / → : Move  
+↑ / z : Jump  
+↓ (moving) : Skull bash  
+↓ + Hold jump (not moving) : Charge skull bash, release jump to fire  
+r : Restart level  

@@ -98,6 +98,11 @@ int main(){
 	sf::Texture ringTexture;
 	ringTexture.loadFromFile("ressources/ring.png");
 
+	sf::Sprite ringSpriteHUD;
+	ringSpriteHUD.setTexture(ringTexture);
+	ringSpriteHUD.setScale(sf::Vector2f(0.20,0.20));
+	ringSpriteHUD.move(0,50);
+
 	sf::Sprite tiles[MAX_TILE_ITEMS];
 	for(int i = 0; i < MAX_TILE_ITEMS;++i){
 		setSprite((tiles[i]),sonicTilemap,sf::IntRect(TILE_SIZE * (i % NB_TILEMAP_WIDTH), TILE_SIZE * (i / NB_TILEMAP_WIDTH) , TILE_SIZE, TILE_SIZE));
@@ -275,14 +280,20 @@ int main(){
 	fpsCountText.setCharacterSize(24);
 	fpsCountText.setFillColor(sf::Color::White);
 	fpsCountText.setString("fps");
+	fpsCountText.setPosition(window.getSize().x -100,0);
 
 	sf::Text ringCountText;
 	ringCountText.setFont(font);
 	ringCountText.setCharacterSize(24);
 	ringCountText.setFillColor(sf::Color::White);
 	ringCountText.setString("__ rings");
-	ringCountText.setPosition(10,100);
+	ringCountText.setPosition(50,55);
 
+	sf::Text speedText;
+	speedText.setFont(font);
+	speedText.setCharacterSize(24);
+	speedText.setFillColor(sf::Color::White);
+	speedText.setString("__ mph");
 
 	while(window.isOpen()){
 
@@ -487,7 +498,8 @@ int main(){
 		}
 		player.updateAnimation(averageTime);
 
-		ringCountText.setString(std::to_string(player.ringCounter) + " rings");
+		ringCountText.setString(" : " + std::to_string(player.ringCounter));
+		speedText.setString("Speed : " + std::to_string((int)player.velocity * 10) + " Mph");
 
 		if(!player.isDead)view.setCenter(cameraX,cameraY);
 
@@ -555,7 +567,9 @@ int main(){
 		loadTexture = false;
 		window.setView(window.getDefaultView());
 		window.draw(fpsCountText);
+		window.draw(ringSpriteHUD);
 		window.draw(ringCountText);
+		window.draw(speedText);
 		window.display();
 	}
 

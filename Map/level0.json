@@ -73,8 +73,8 @@
                  "type":"",
                  "visible":true,
                  "width":52,
-                 "x":2383.03386144765,
-                 "y":763.916744330534
+                 "x":2587.03386144765,
+                 "y":629.250077663867
                 }, 
                 {
                  "height":46.6666666666667,
@@ -86,6 +86,17 @@
                  "width":30.6666666666667,
                  "x":1969.33333333333,
                  "y":661.333333333333
+                }, 
+                {
+                 "height":30,
+                 "id":9,
+                 "name":"ring",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":52,
+                 "x":2675.33333333333,
+                 "y":637
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -94,7 +105,7 @@
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":9,
+ "nextobjectid":10,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.4",

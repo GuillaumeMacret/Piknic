@@ -11,13 +11,11 @@
 
 - Use matrix to test less collisions
 - Find why fps influences speed (apparently make velocity increaes faster)
-- Update readme
+- Use new coll algo on enemies
 
 
 ## Cool stuff
 
-- Use new coll algo on enemies
-- Show speed
 - Change charge spin dash sprite
 - Ring spread
 - Animations (enemies)
