@@ -138,15 +138,15 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
     if(isDead)return;
     if(down){
         left = right = false;
-        if(velocity > 0 && !isChargingSpinDash){ //roll until can't move
+        if(velocity != 0 && !isChargingSpinDash){ //roll until can't move
             isAttacking = true;
-        }else if (!up && velocity > 0 && isChargingSpinDash){// Realease spin dash
+        }else if (!up && velocity != 0 && isChargingSpinDash){// Realease spin dash
             isChargingSpinDash = false;
             isSpinDashing = true;
             //FIXME group sound playing
             audioPlayer.playReleaseSpinDash();
         }else if(up && jumpTimer == 0){ // spin dash charge
-            incVelocity(VELOCITY_INC_SPIN_DASH * timeElapsed);
+            incVelocity(VELOCITY_INC_SPIN_DASH * facingDirection * timeElapsed);
             isChargingSpinDash = true;
         }else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
             moveY-=JUMP_SPEED * timeElapsed;
@@ -157,7 +157,7 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         moveY-=JUMP_SPEED * timeElapsed;
         jumpTimer += timeElapsed;
         isJumping = true;
-    }else if(velocity <= 0){
+    }else if(velocity > -MIN_ATK_VELOCITY && velocity < MIN_ATK_VELOCITY){
         isSpinDashing = false;
         isAttacking = false;
     }
@@ -194,10 +194,6 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         }
     }
 
-    if(velocity < MIN_ATK_VELOCITY){
-        isSpinDashing = false;
-        isAttacking = false;
-    }
     // if(velocity == 0){
     //     isMoving = false;
     // }
