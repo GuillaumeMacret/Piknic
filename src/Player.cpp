@@ -116,12 +116,19 @@ inline void Player::incVelocity(float i){
 
     if (velocity > MAX_VELOCITY){
         velocity = MAX_VELOCITY;
+    }else if(velocity < -MAX_VELOCITY){
+        velocity = -MAX_VELOCITY;
     }
 }
 
 inline void Player::decVelocity(float i){
-    velocity -= i;
-    if(velocity < 0) velocity = 0;
+    if(velocity > 0){
+        velocity -= i;
+        if(velocity < 0) velocity = 0;
+    }else if (velocity < 0){
+        velocity += i;
+    }
+    
 }
 void Player::hasTouchedGround(){
     jumpTimer = 0;
@@ -168,7 +175,11 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
             isSpinDashing = false;
         }
         facingDirection = -1;
-        incVelocity(VELOCITY_INC * timeElapsed);
+        if(velocity > 0){
+            incVelocity((-VELOCITY_INC - FRICTION)* timeElapsed);
+        }else{
+            incVelocity(-VELOCITY_INC * timeElapsed);
+        }
     }
     if (right) {
         if(facingDirection == -1 && !down){
@@ -176,7 +187,11 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
             isSpinDashing = false;
         }
         facingDirection = 1;
-        incVelocity(VELOCITY_INC * timeElapsed);
+        if(velocity < 0){
+            incVelocity((VELOCITY_INC + FRICTION)* timeElapsed);
+        }else{
+            incVelocity(VELOCITY_INC* timeElapsed);
+        }
     }
 
     if(velocity < MIN_ATK_VELOCITY){
@@ -198,7 +213,7 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
 }
 
 void Player::setVelocityInMoveX(){
-    moveX = velocity * facingDirection;
+    moveX = velocity;
 }
 
 void Player::doVelocityMove(){

@@ -294,7 +294,7 @@ int main(){
 	speedText.setString("__ mph");
 
 	//FIXME issue with speed and framerate
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(61);
 
 	while(window.isOpen()){
 

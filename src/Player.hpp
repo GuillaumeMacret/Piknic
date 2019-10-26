@@ -15,7 +15,7 @@ class Player{
         sf::FloatRect lastBoundingBox;
         bool isMoving = false, isJumping = false,isAttacking = false, isChargingSpinDash = false, isSpinDashing = false, isDead = false;
         int facingDirection = 1;
-        float velocity=0, xMovementCollision = 0;
+        float velocity = 0, xMovementCollision = 0;
         sf::Sprite currentSprite;
         AnimatedSprite *currentAnimation;
         std::map<std::string, AnimatedSprite> animations;
