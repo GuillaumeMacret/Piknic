@@ -4,14 +4,22 @@ OBJS = bin/GameAudio.o bin/PlayerAudio.o bin/Enemy.o bin/MyClock.o bin/AnimatedS
 
 LIBS = -lpthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
-TARGET = piknic.app
+TARGET = piknic.test
+BUILD = piknic
 CXX = g++
 
 $(TARGET):	$(OBJS)
 	$(CXX) -o $(TARGET) $(OBJS) $(LIBS)
 
+build:	makeDir $(OBJS)
+	
+	$(CXX) -o $(BUILD) $(OBJS) $(LIBS)
+
 all:	$(TARGET)
 	$(CXX) $(COPTION) -c $(TARGET)
+
+makeDir:
+	mkdir bin || echo "Bin exists ignore above error"
 
 clean:
 	rm -f $(OBJS) $(TARGET)
