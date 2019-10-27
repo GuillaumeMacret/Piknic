@@ -141,6 +141,11 @@ void Player::hasTouchedGround(){
 
 void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, bool right){
     if(isDead)return;
+    if((!up || !down) && isChargingSpinDash){
+        isChargingSpinDash = false;
+        isSpinDashing = true;
+        audioPlayer.playReleaseSpinDash();
+    }
     if(down){
         left = right = false;
         if(!(velocity > -MIN_ATK_VELOCITY && velocity < MIN_ATK_VELOCITY) && !isChargingSpinDash){ //roll until can't move
@@ -160,7 +165,8 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
 
             //moveY-=JUMP_SPEED * timeElapsed;
         }*/
-    }else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
+    }
+    if (!isChargingSpinDash && up && jumpTimer < MAXIMUM_JUMP_TIMER){
         velocityY -= VELOCITY_INC_Y *timeElapsed;
         jumpTimer += timeElapsed;
         isJumping = true;
@@ -206,7 +212,7 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         }
     }
 
-    std::cerr<<velocity<<std::endl;
+    std::cerr<<velocityY<<std::endl;
 
     // if(velocity == 0){
     //     isMoving = false;
