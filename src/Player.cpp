@@ -9,7 +9,6 @@
 
 #define SPEED 500.0f
 #define JUMP_SPEED 1000.0f
-#define MAXIMUM_JUMP_TIMER .25f
 #define VELOCITY_INC 10.0f
 #define VELOCITY_INC_SPIN_DASH 20.0f
 #define FRICTION 25.0f

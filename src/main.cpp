@@ -79,7 +79,7 @@ int main(){
 	//TODO can delete this ? Use maps[currentlevel].collisiontiles
 	std::vector<sf::Sprite *>collisionTiles, topCollisionTiles;
 
-	int currentLevel = 0;
+	int currentLevel = 1;
 
 	std::vector<sf::Sprite *> rings;
 
@@ -418,10 +418,15 @@ int main(){
 		if(collisionReadjustY < BIG_FLOAT){
 			// std::cerr << "Readjusting y by " << collisionReadjustY * dirMulY<<std::endl;
 			player.moveY += collisionReadjustY * dirMulY;
+			player.isFalling = false;
 			if(dirMulY == -1 && !player.isJumping) player.hasTouchedGround();
+		}else if(!player.isJumping){
+			player.isFalling = true;
+			player.jumpTimer = MAXIMUM_JUMP_TIMER;
 		}
 
 		//std::cerr<<"Vector move after : "<<player.moveX<<", "<<player.moveY<<std::endl;
+		// std::cerr<<"Falling : "<<player.isFalling<<std::endl;
 
 		player.doVelocityMove();
 

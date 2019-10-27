@@ -13,11 +13,6 @@ To run the latest stable version of piknic use
 
 ## Build & run
 
-To build & run the latest stable version use :
-```
-make build && piknic
-```
-
 To build directly from the sources use :
 
 ``` shell

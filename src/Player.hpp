@@ -13,7 +13,7 @@ class Player{
 
         PlayerAudio audioPlayer;
         sf::FloatRect lastBoundingBox;
-        bool isMoving = false, isJumping = false,isAttacking = false, isChargingSpinDash = false, isSpinDashing = false, isDead = false;
+        bool isMoving = false, isJumping = false,isAttacking = false, isChargingSpinDash = false, isSpinDashing = false, isDead = false, isFalling = false;
         int facingDirection = 1;
         float velocity = 0, xMovementCollision = 0;
         sf::Sprite currentSprite;
