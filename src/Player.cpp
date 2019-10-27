@@ -143,7 +143,7 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
     if(isDead)return;
     if(down){
         left = right = false;
-        if(velocity != 0 && !isChargingSpinDash){ //roll until can't move
+        if(!(velocity > -MIN_ATK_VELOCITY && velocity < MIN_ATK_VELOCITY) && !isChargingSpinDash){ //roll until can't move
             isAttacking = true;
         }else if (!up && velocity != 0 && isChargingSpinDash){// Realease spin dash
             isChargingSpinDash = false;
@@ -153,20 +153,21 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         }else if(up && jumpTimer == 0){ // spin dash charge
             incVelocity(VELOCITY_INC_SPIN_DASH * facingDirection * timeElapsed);
             isChargingSpinDash = true;
-        }else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
+        }/*else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
             velocityY -= VELOCITY_INC_Y *timeElapsed;
             jumpTimer += timeElapsed;
             isJumping = true;
 
             //moveY-=JUMP_SPEED * timeElapsed;
-        }
+        }*/
     }else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
         velocityY -= VELOCITY_INC_Y *timeElapsed;
         jumpTimer += timeElapsed;
         isJumping = true;
 
         //moveY-=JUMP_SPEED * timeElapsed;
-    }else if(velocity > -MIN_ATK_VELOCITY && velocity < MIN_ATK_VELOCITY){
+    }
+    if(velocity > -MIN_ATK_VELOCITY && velocity < MIN_ATK_VELOCITY){
         isSpinDashing = false;
         isAttacking = false;
     }
@@ -205,7 +206,7 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         }
     }
 
-    std::cerr<<velocityY<<std::endl;
+    std::cerr<<velocity<<std::endl;
 
     // if(velocity == 0){
     //     isMoving = false;

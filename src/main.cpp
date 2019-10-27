@@ -317,6 +317,11 @@ int main(){
 				else if (event.key.code == sf::Keyboard::Z) upFlag = true;
 				else if (event.key.code == sf::Keyboard::Down) downFlag = true;
 				else if (event.key.code == sf::Keyboard::R) loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
+				else if (event.key.code == sf::Keyboard::N) {
+					++currentLevel;
+					if(currentLevel >= NB_LEVELS)currentLevel = 0;
+					loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
+				}
 			}else if (event.type == sf::Event::KeyReleased){
 				if(event.key.code == sf::Keyboard::Left) leftFlag = false;
 				else if (event.key.code == sf::Keyboard::Right) rightFlag = false;
