@@ -4,6 +4,7 @@ Piknic is the first school project of Artois' university video game master in 20
 
 ## Run
 
+*You will need to SFML installed in order to build & run*  
 To run the latest stable version of piknic use
 
 ```shell
@@ -12,7 +13,6 @@ To run the latest stable version of piknic use
 
 ## Build & run
 
-*You will need to SFML installed in order to build*  
 To build directly from the sources use :
 
 ``` shell
