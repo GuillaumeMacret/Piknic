@@ -8,9 +8,11 @@
 
 ## Very important
 
-- bug : charge spin dash while falling
 - Use matrix to test less collisions
 - Use new colision algo on enemies
+- Jump sound
+- Music
+- Son perte rings
 
 
 ## Cool stuff

@@ -1,3 +1,4 @@
+#include "Music.hpp"
 #include "RectTools.hpp"
 #include "GameAudio.hpp"
 #include "../Map/MapLoader.hpp"
@@ -69,6 +70,7 @@ int main(){
 	sf::RenderWindow window(sf::VideoMode(1280,720),"Piknic!");
 
 	GameAudio gameAudio;
+	Music  gameMusic;
 
 	sf::Font font;
 	if (!font.loadFromFile("ressources/Go-Bold.ttf"))
@@ -263,6 +265,7 @@ int main(){
 
 	/*Loading 1st level */
 	loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
+	gameMusic.playMusic(currentLevel);
 
 	/*Gameloop*/
 	bool upFlag,downFlag,leftFlag,rightFlag;
@@ -316,11 +319,12 @@ int main(){
 				else if (event.key.code == sf::Keyboard::Up) upFlag = true;
 				else if (event.key.code == sf::Keyboard::Z) upFlag = true;
 				else if (event.key.code == sf::Keyboard::Down) downFlag = true;
-				else if (event.key.code == sf::Keyboard::R) loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
+				else if (event.key.code == sf::Keyboard::R) loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos), gameMusic.playMusic(currentLevel);
 				else if (event.key.code == sf::Keyboard::N) {
 					++currentLevel;
 					if(currentLevel >= NB_LEVELS)currentLevel = 0;
 					loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
+					gameMusic.playMusic(currentLevel);
 				}
 			}else if (event.type == sf::Event::KeyReleased){
 				if(event.key.code == sf::Keyboard::Left) leftFlag = false;
@@ -482,6 +486,7 @@ int main(){
 		if(player.getCurrentSprite().getGlobalBounds().intersects(maps[currentLevel]->exit)){
 			++currentLevel %= NB_LEVELS;
 			loadLevel(loadTexture,currentLevel,collisionTiles,levelsSprites, topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
+			gameMusic.playMusic(currentLevel);
 		}
 
 		if(player.currentSprite.getGlobalBounds().top > maps[currentLevel]->heigth * TILE_SIZE){

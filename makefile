@@ -1,6 +1,6 @@
 CXXFLAGS = -std=c++11
 
-OBJS = bin/GameAudio.o bin/PlayerAudio.o bin/Enemy.o bin/MyClock.o bin/AnimatedSprite.o bin/Player.o bin/main.o 
+OBJS = bin/Music.o bin/GameAudio.o bin/PlayerAudio.o bin/Enemy.o bin/MyClock.o bin/AnimatedSprite.o bin/Player.o bin/main.o 
 
 LIBS = -lpthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
@@ -46,6 +46,9 @@ bin/PlayerAudio.o: src/PlayerAudio.hpp src/PlayerAudio.cpp
 
 bin/GameAudio.o: src/GameAudio.hpp src/GameAudio.cpp
 	c++ -c src/GameAudio.cpp -o bin/GameAudio.o
+
+bin/Music.o: src/Music.hpp src/Music.cpp
+	c++ -c src/Music.cpp -o bin/Music.o
 
 bin/AnimatedSprite.o: src/AnimatedSprite.hpp src/AnimatedSprite.cpp
 	c++ -c src/AnimatedSprite.cpp -o bin/AnimatedSprite.o
