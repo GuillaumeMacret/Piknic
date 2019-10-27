@@ -7,9 +7,9 @@
 #include "Player.hpp"
 #include <iostream>
 
-#define SPEED 500.0f
 #define JUMP_SPEED 1000.0f
-#define VELOCITY_INC 10.0f
+#define VELOCITY_INC_Y 100.0f
+#define VELOCITY_INC_X 10.0f
 #define VELOCITY_INC_SPIN_DASH 20.0f
 #define FRICTION 25.0f
 #define MIN_ATK_VELOCITY 10.0f
@@ -109,9 +109,14 @@ void Player::resetForces(){
     moveX = moveY = 0;
 }
 
-inline void Player::incVelocity(float i){
+void Player::incVelocityY(float i){
+    velocityY += i;
+
+}
+
+void Player::incVelocity(float i){
     velocity += i;
-	std::cerr<<i<<std::endl;
+	//std::cerr<<i<<std::endl;
 
     if (velocity > MAX_VELOCITY){
         velocity = MAX_VELOCITY;
@@ -131,6 +136,7 @@ inline void Player::decVelocity(float i){
 }
 void Player::hasTouchedGround(){
     jumpTimer = 0;
+    velocityY = 0;
 }
 
 void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, bool right){
@@ -148,14 +154,18 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
             incVelocity(VELOCITY_INC_SPIN_DASH * facingDirection * timeElapsed);
             isChargingSpinDash = true;
         }else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
-            moveY-=JUMP_SPEED * timeElapsed;
+            velocityY -= VELOCITY_INC_Y *timeElapsed;
             jumpTimer += timeElapsed;
             isJumping = true;
+
+            //moveY-=JUMP_SPEED * timeElapsed;
         }
     }else if (up && jumpTimer < MAXIMUM_JUMP_TIMER){
-        moveY-=JUMP_SPEED * timeElapsed;
+        velocityY -= VELOCITY_INC_Y *timeElapsed;
         jumpTimer += timeElapsed;
         isJumping = true;
+
+        //moveY-=JUMP_SPEED * timeElapsed;
     }else if(velocity > -MIN_ATK_VELOCITY && velocity < MIN_ATK_VELOCITY){
         isSpinDashing = false;
         isAttacking = false;
@@ -166,6 +176,8 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
 
     if(!up || jumpTimer >= MAXIMUM_JUMP_TIMER ){
         isJumping = false;
+        velocityY += VELOCITY_INC_Y * timeElapsed;
+        if(velocityY > 0)velocityY = 0;
     }
 
     if (left){
@@ -175,9 +187,9 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         }
         facingDirection = -1;
         if(velocity > 0){
-            incVelocity((-VELOCITY_INC - FRICTION)* timeElapsed);
+            incVelocity((-VELOCITY_INC_X - FRICTION)* timeElapsed);
         }else{
-            incVelocity(-VELOCITY_INC * timeElapsed);
+            incVelocity(-VELOCITY_INC_X * timeElapsed);
         }
     }
     if (right) {
@@ -187,11 +199,13 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         }
         facingDirection = 1;
         if(velocity < 0){
-            incVelocity((VELOCITY_INC + FRICTION)* timeElapsed);
+            incVelocity((VELOCITY_INC_X + FRICTION)* timeElapsed);
         }else{
-            incVelocity(VELOCITY_INC* timeElapsed);
+            incVelocity(VELOCITY_INC_X* timeElapsed);
         }
     }
+
+    std::cerr<<velocityY<<std::endl;
 
     // if(velocity == 0){
     //     isMoving = false;
@@ -209,6 +223,10 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
 
 void Player::setVelocityInMoveX(){
     moveX = velocity;
+}
+
+void Player::setVelocityInMoveY(){
+    moveY += velocityY;
 }
 
 void Player::doVelocityMove(){

@@ -336,9 +336,10 @@ int main(){
 		/** Calculating move vector **/
 		player.resetForces();
 		player.setKeyboardForces(averageTime, upFlag,downFlag,leftFlag,rightFlag);
+		player.setGravityForces(averageTime);
 		player.setFrictionForces(averageTime);
 		player.setVelocityInMoveX();
-		player.setGravityForces(averageTime);
+		player.setVelocityInMoveY();
 
 		/** Adjust vector to handle wall collision **/
 		// std::cerr<<player.currentSprite.getGlobalBounds().left << " > "<<futurRect.left<<std::endl;

@@ -15,7 +15,7 @@ class Player{
         sf::FloatRect lastBoundingBox;
         bool isMoving = false, isJumping = false,isAttacking = false, isChargingSpinDash = false, isSpinDashing = false, isDead = false, isFalling = false;
         int facingDirection = 1;
-        float velocity = 0, xMovementCollision = 0;
+        float velocity = 0, velocityY = 0, xMovementCollision = 0;
         sf::Sprite currentSprite;
         AnimatedSprite *currentAnimation;
         std::map<std::string, AnimatedSprite> animations;
@@ -26,6 +26,7 @@ class Player{
         void resetForces();
         void setKeyboardForces(float timeElapsed, bool up,bool down, bool left, bool right);
         void setVelocityInMoveX();
+        void setVelocityInMoveY();
         void hasTouchedGround();
         void setFrictionForces(float timeElapsed);
         void setGravityForces(float timeElapsed);
@@ -44,6 +45,7 @@ class Player{
         void fallFromMap();
         void updateIframe(float timeElapsed);
         void incVelocity(float i);
+        void incVelocityY(float i);
         void decVelocity(float i);
         int createNewAnimation(std::string name, int nbFrames, float animTime, sf::Texture textures[]);
         void updateAnimation(float timeElapsed);
