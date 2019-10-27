@@ -12,8 +12,10 @@ $(TARGET):	$(OBJS)
 	$(CXX) -o $(TARGET) $(OBJS) $(LIBS)
 
 build:	makeDir $(OBJS)
-	
 	$(CXX) -o $(BUILD) $(OBJS) $(LIBS)
+
+build-windows: $(OBJS)
+	x86_64-w64-mingw32-$(CXX) -o $(BUILD) $(OBJS) $(LIBS)
 
 all:	$(TARGET)
 	$(CXX) $(COPTION) -c $(TARGET)
