@@ -20,6 +20,16 @@
 #define NB_LEVELS 3
 
 
+bool spriteInView(sf::Sprite *sprite, sf::View &view){
+	if(sprite->getPosition().x < view.getCenter().x - view.getSize().x){
+		return false;
+	}
+	if(sprite->getPosition().x > view.getCenter().x + view.getSize().x){
+		return false;
+	}
+	return true;
+}
+
 void setSprite(sf::Sprite &sprite, sf::Texture &texture,sf::IntRect bounds){
 	sprite.setTexture(texture);
 	sprite.setTextureRect(bounds);
@@ -533,15 +543,15 @@ int main(){
 		window.draw(bgSprite);
 		// std::cerr<<"I frame counter"<<player.IframeCounter<<std::endl;
 		for(int i = 0; i < levelsBackgroundSprites[currentLevel].size(); ++i){
-			window.draw(*levelsBackgroundSprites[currentLevel][i]);
+			if(spriteInView(levelsBackgroundSprites[currentLevel][i],view)) window.draw(*levelsBackgroundSprites[currentLevel][i]);
 		}
 		for(int i = 0; i < levelsSprites[currentLevel].size(); ++i){
 			// if(levelsSprites[currentLevel][i]){
-				window.draw(*levelsSprites[currentLevel][i]);
+				if(spriteInView(levelsSprites[currentLevel][i],view)) window.draw(*levelsSprites[currentLevel][i]);
 			// }
 		}
 		for(int i = 0; i < levelsTopSprites[currentLevel].size(); ++i){
-			window.draw(*levelsTopSprites[currentLevel][i]);
+			if(spriteInView(levelsTopSprites[currentLevel][i],view)) window.draw(*levelsTopSprites[currentLevel][i]);
 		}
 
 		
