@@ -8,15 +8,14 @@
 
 ## Very important
 
+- Mettre un niveau avec 69 anneaux
 - Use matrix to test less collisions
 - Use new colision algo on enemies
-- Jump sound
-- Music
-- Son perte rings
-
+- Recul perte ring
 
 ## Cool stuff
 
+- Plateformes qui bougent
 - Change charge spin dash sprite
 - Ring spread
 - Animations (enemies)

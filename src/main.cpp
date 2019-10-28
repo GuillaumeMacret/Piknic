@@ -60,10 +60,11 @@ void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collis
 	loadTextures = true;
 
 	player.IframeCounter = 0;
+	player.ringCounter = 0;
 	player.isDead = false;
 	player.velocity = 0;
 
-	std::cerr<<"Loaded level "<<levelId<<std::endl;
+	std::cout<<"[INFO] Loaded level "<<levelId<<std::endl;
 }
 
 int main(){
@@ -210,17 +211,13 @@ int main(){
 		maps[i] = createMapFromJSON("Map/level" + std::to_string(i) + ".json");
 		std::vector<sf::Sprite*> thisLevelSpriteVec, ennemiesColSpriteVec, thisLevelTopSpriteVec, thisLevelBackgroundSpriteVec;
 
-		//TODO Background layer
-
 		int collisionLayerId = -1, topCollisionLayerId = -1, enemyCollisionLayerId = -1, backgroundTilesLayerId = -1;
 		for(int j = 0; j < maps[i]->layers.size(); ++j){
-			std::cerr<<"Layer Name : "<<maps[i]->layers[j]->name<<std::endl;
 			if(maps[i]->layers[j]->name == "CollisionTiles")collisionLayerId = j;
 			if(maps[i]->layers[j]->name == "TopCollisionTiles")topCollisionLayerId = j;
 			if(maps[i]->layers[j]->name == "EnemyCollision")enemyCollisionLayerId = j;
 			if(maps[i]->layers[j]->name == "Background")backgroundTilesLayerId = j;
 		}
-		std::cerr<<collisionLayerId<<' ' << topCollisionLayerId << " "<< enemyCollisionLayerId<<" "<<backgroundTilesLayerId<<std::endl;
 		for(int j = 0;j < maps[i]->width;++j){
 			for(int k = 0;k < maps[i]->heigth;++k){
 				/*Overall collision Layer*/
@@ -253,8 +250,6 @@ int main(){
 			}
 		}
 
-		std::cerr<<"Nb of bg tiles : "<<thisLevelBackgroundSpriteVec.size()<<std::endl;
-
 		levelsSprites.push_back(thisLevelSpriteVec);
 		levelsTopSprites.push_back(thisLevelTopSpriteVec);
 		levelsBackgroundSprites.push_back(thisLevelBackgroundSpriteVec);
@@ -264,7 +259,6 @@ int main(){
 		if(maps[i]->heigth > maxHeight)maxHeight = maps[i]->heigth;
 	}
 
-	std::cerr<<maxWidth<<" "<<maxHeight<<std::endl;
 	backgroundTexture.setRepeated(true);
 	sf::Sprite bgSprite(backgroundTexture, sf::IntRect(0,0,maxWidth*TILE_SIZE,maxHeight*TILE_SIZE));
 
@@ -316,6 +310,7 @@ int main(){
 		averageTime = myclock.avg();
 
         float fps = 1.f / averageTime;
+		if(fps < 60)std::cerr<< "[WARN] fps got under 60 : "<<fps<<std::endl;
 		fpsCountText.setString("fps : " + std::to_string((int)fps));
 		/*Inputs*/
 		sf::Event event;
@@ -418,7 +413,7 @@ int main(){
 				if(collisionReadjustY > yOffset)collisionReadjustY = yOffset;
     		}
 		}
-		/// Collision with top tiles TODO
+		/// Collision with top tiles
 		for(int i = 0;i < levelsTopSprites[currentLevel].size();++i){
 			if(movementRect->intersects(levelsTopSprites[currentLevel][i]->getGlobalBounds())){
 				sf::FloatRect intersection;

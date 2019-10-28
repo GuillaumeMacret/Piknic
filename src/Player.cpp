@@ -13,7 +13,7 @@
 #define VELOCITY_INC_SPIN_DASH 20.0f
 #define FRICTION 25.0f
 #define MIN_ATK_VELOCITY 10.0f
-
+#define KNOCKBACK_VELOCITY 10.0f
 Player::Player(){}
 
 sf::Sprite& Player::getCurrentSprite(){
@@ -213,7 +213,7 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         }
     }
 
-    std::cerr<<velocityY<<std::endl;
+    // std::cerr<<velocityY<<std::endl;
 
     // if(velocity == 0){
     //     isMoving = false;
@@ -304,7 +304,7 @@ void Player::getHit(){
     //Don't damage in iframe
     if(IframeCounter <= I_FRAME_DUR || isDead)return;
     if(ringCounter <= 0){
-        std::cerr<<"Player got gameover"<<std::endl;
+        std::cout<<"[INFO] Player got gameover by hit"<<std::endl;
         audioPlayer.playDieHit();
         isDead = true;
         //exit(0);
@@ -312,6 +312,7 @@ void Player::getHit(){
         //TODO spread rings
         ringCounter = 0;
         IframeCounter = 0;
+        velocity = KNOCKBACK_VELOCITY * -facingDirection;
         audioPlayer.playRingLoose();
     }
 }
