@@ -167,6 +167,7 @@ void Player::setKeyboardForces(float timeElapsed, bool up,bool down, bool left, 
         }*/
     }
     if (!isChargingSpinDash && up && jumpTimer < MAXIMUM_JUMP_TIMER){
+        if(!isJumping && !isSpinDashing)audioPlayer.playJump();
         velocityY -= VELOCITY_INC_Y *timeElapsed;
         jumpTimer += timeElapsed;
         isJumping = true;
@@ -311,6 +312,7 @@ void Player::getHit(){
         //TODO spread rings
         ringCounter = 0;
         IframeCounter = 0;
+        audioPlayer.playRingLoose();
     }
 }
 

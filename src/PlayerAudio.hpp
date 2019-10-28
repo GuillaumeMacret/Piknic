@@ -3,7 +3,7 @@
 class PlayerAudio{
     public:
         sf::Sound soundsOutput;
-        sf::SoundBuffer pikaAtk1, pikaChargeSpinDash1,pikaReleaseSpinDash1, pikaDieHit1, pikaFall1;
+        sf::SoundBuffer pikaAtk1, pikaChargeSpinDash1,pikaReleaseSpinDash1, pikaDieHit1, pikaFall1, ringLoose1, pikaJump1;
 
         PlayerAudio();
         void playAtk();
@@ -11,4 +11,6 @@ class PlayerAudio{
         void playReleaseSpinDash();
         void playDieHit();
         void playFall();
+        void playRingLoose();
+        void playJump();
 };

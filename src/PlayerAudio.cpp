@@ -12,6 +12,10 @@ PlayerAudio::PlayerAudio(){
     if (!pikaDieHit1.loadFromFile(soundPath))std::cerr<<"Cant load "<<soundPath<<std::endl;
     soundPath = "ressources/Sounds/pikaFall1.wav";
     if (!pikaFall1.loadFromFile(soundPath))std::cerr<<"Cant load "<<soundPath<<std::endl;
+    soundPath = "ressources/Sounds/ringLoose1.wav";
+    if (!ringLoose1.loadFromFile(soundPath))std::cerr<<"Cant load "<<soundPath<<std::endl;
+    soundPath = "ressources/Sounds/pikaJump1.wav";
+    if (!pikaJump1.loadFromFile(soundPath))std::cerr<<"Cant load "<<soundPath<<std::endl;
 }
 
 void PlayerAudio::playAtk(){
@@ -36,5 +40,16 @@ void PlayerAudio::playDieHit(){
 
 void PlayerAudio::playFall(){
     soundsOutput.setBuffer(pikaFall1);
+    soundsOutput.play();
+}
+
+void PlayerAudio::playRingLoose(){
+    soundsOutput.setBuffer(ringLoose1);
+    soundsOutput.play();
+}
+
+void PlayerAudio::playJump(){
+    
+    soundsOutput.setBuffer(pikaJump1);
     soundsOutput.play();
 }

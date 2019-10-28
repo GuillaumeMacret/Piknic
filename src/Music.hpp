@@ -3,8 +3,9 @@
 class Music{
     public:
         sf::Sound soundsOutput;
-        sf::SoundBuffer greenHill2;
+        sf::SoundBuffer greenHill2, feelSunshine;
 
         Music();
         void playMusic(int id);
+        void playSunshine();
 };

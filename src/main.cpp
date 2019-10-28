@@ -69,8 +69,6 @@ void loadLevel(bool &loadTextures, int levelId, std::vector<sf::Sprite*> &collis
 int main(){
 	sf::RenderWindow window(sf::VideoMode(1280,720),"Piknic!");
 
-	GameAudio gameAudio;
-	Music  gameMusic;
 
 	sf::Font font;
 	if (!font.loadFromFile("ressources/Go-Bold.ttf"))
@@ -87,6 +85,17 @@ int main(){
 
 	std::vector<Enemy *> enemies;
 	std::vector<sf::Sprite *>enemiesCollisionTiles;
+	
+	sf::Text loadingText;
+	loadingText.setFont(font);
+	loadingText.setString("Loading ressources ...");
+	loadingText.setScale(sf::Vector2f(2,2));
+	loadingText.setPosition(sf::Vector2f(300,300));
+	window.draw(loadingText);
+	window.display();
+
+	GameAudio gameAudio;
+	Music  gameMusic;
 
 	/*Loading Sprites*/
 	sf::Texture pikachuSpriteSheet;
@@ -326,6 +335,8 @@ int main(){
 					loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
 					gameMusic.playMusic(currentLevel);
 				}
+				else if (event.key.code == sf::Keyboard::M) gameMusic.playSunshine();
+
 			}else if (event.type == sf::Event::KeyReleased){
 				if(event.key.code == sf::Keyboard::Left) leftFlag = false;
 				else if (event.key.code == sf::Keyboard::Right) rightFlag = false;
