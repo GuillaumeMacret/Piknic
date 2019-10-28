@@ -17,7 +17,7 @@
 #define MAX_TILE_ITEMS NB_TILEMAP_WIDTH * NB_TILEMAP_HEIGHT
 #define TILE_SIZE 48
 #define MAX_ENEMIES 32
-#define NB_LEVELS 3
+#define NB_LEVELS 2
 
 
 bool spriteInView(sf::Sprite *sprite, sf::View &view){
@@ -90,7 +90,7 @@ int main(){
 	//TODO can delete this ? Use maps[currentlevel].collisiontiles
 	std::vector<sf::Sprite *>collisionTiles, topCollisionTiles;
 
-	int currentLevel = 1;
+	int currentLevel = 0;
 
 	std::vector<sf::Sprite *> rings;
 
@@ -101,9 +101,15 @@ int main(){
 	loadingText.setFont(font);
 	loadingText.setString("Loading ressources ...");
 	loadingText.setScale(sf::Vector2f(2,2));
-	loadingText.setPosition(sf::Vector2f(300,300));
+	loadingText.setPosition(sf::Vector2f(window.getSize().x/2 - loadingText.getGlobalBounds().width/2,window.getSize().y/2 - loadingText.getGlobalBounds().height/2));
 	window.draw(loadingText);
 	window.display();
+
+	sf::Text gameOverText;
+	gameOverText.setFont(font);
+	gameOverText.setString("Press R to restart");
+	gameOverText.setScale(sf::Vector2f(2,2));
+	gameOverText.setPosition(sf::Vector2f(window.getSize().x/2 - gameOverText.getGlobalBounds().width/2,window.getSize().y/2 - gameOverText.getGlobalBounds().height/2));
 
 	GameAudio gameAudio;
 	Music  gameMusic;
@@ -333,7 +339,7 @@ int main(){
 				else if (event.key.code == sf::Keyboard::Up) upFlag = true;
 				else if (event.key.code == sf::Keyboard::Z) upFlag = true;
 				else if (event.key.code == sf::Keyboard::Down) downFlag = true;
-				else if (event.key.code == sf::Keyboard::R) loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos), gameMusic.playMusic(currentLevel);
+				else if (event.key.code == sf::Keyboard::R) loadLevel(loadTexture, currentLevel,collisionTiles,levelsSprites,topCollisionTiles, levelsTopSprites, player,maps[currentLevel]->start,enemies,maps[currentLevel]->enemiesPos,enemiesCollisionTiles,levelsEnemiesCollSprites,view,rings,maps[currentLevel]->ringPos);
 				else if (event.key.code == sf::Keyboard::N) {
 					++currentLevel;
 					if(currentLevel >= NB_LEVELS)currentLevel = 0;
@@ -576,7 +582,7 @@ int main(){
 		player.currentSprite.setColor(sf::Color(255,255,255,255));
 
 		/*Debug*/
-		
+		/*
 		sf::RectangleShape rectMv(sf::Vector2f(movementRect->width,movementRect->height));
 		rectMv.move(sf::Vector2f(movementRect->left,movementRect->top));
 		rectMv.setFillColor(sf::Color(255,0,0,200));
@@ -604,6 +610,7 @@ int main(){
 		window.draw(ringSpriteHUD);
 		window.draw(ringCountText);
 		window.draw(speedText);
+		if(player.isDead)window.draw(gameOverText);
 		window.display();
 	}
 

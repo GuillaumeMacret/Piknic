@@ -286,11 +286,6 @@ sf::FloatRect *Player::getLastRect(){
     return rect;
 }
 
-void Player::doMove(){
-    //lastBoundingBox = currentSprite.getGlobalBounds();
-    currentSprite.move(sf::Vector2f(moveX,moveY));
-}
-
 void Player::setGravityForces(float timeElapsed){
     if(!isJumping)moveY += GRAVITY * timeElapsed;
 }
