@@ -662,7 +662,7 @@ int main(){
 		player.currentSprite.setColor(sf::Color(255,255,255,255));
 
 		/*Debug*/
-		
+		/*
 		sf::RectangleShape rectMv(sf::Vector2f(movementRect->width,movementRect->height));
 		rectMv.move(sf::Vector2f(movementRect->left,movementRect->top));
 		rectMv.setFillColor(sf::Color(255,0,0,200));
