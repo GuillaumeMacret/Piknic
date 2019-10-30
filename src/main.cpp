@@ -472,20 +472,97 @@ int main(){
 		/** Handling collision after move **/
 
 		for(std::vector<Enemy *>::iterator ptr = enemies.begin(); ptr < enemies.end();++ptr){
-			(*ptr) -> resetForces();
+			float collisionReadjustX = BIG_FLOAT , collisionReadjustY= BIG_FLOAT;
+			int dirMulX = 1, dirMulY = 1;
+			//std::cerr<<"Vector move before : "<<player.moveX<<", "<<player.moveY<<std::endl;
 			(*ptr) -> setMovementForces(averageTime);
 			(*ptr) -> setGravityForces(averageTime);
-			(*ptr) -> doMove();
-			for(int j = 0; j < collisionTiles.size();++j){
-				if((*ptr) -> isColliding(collisionTiles[j]->getGlobalBounds())){
-					(*ptr) -> handleWallCollision(collisionTiles[j]->getGlobalBounds());
+			//X-Collision
+			collisionReadjustX = BIG_FLOAT;
+			bool changeDir = false;
+			for(int i=0; i < collisionTiles.size();++i){
+				sf::FloatRect futurRect = (*ptr)->currentSprite.getGlobalBounds();
+				futurRect.left += (*ptr)->moveX;
+				movementRect = getContainingRect((*ptr)->currentSprite.getGlobalBounds(),futurRect);
+				if(movementRect->intersects(collisionTiles[i]->getGlobalBounds())){
+					sf::FloatRect intersection;
+					movementRect->intersects(collisionTiles[i]->getGlobalBounds(),intersection);
+					
+					float xOffset = intersection.width;
+					if(movementRect->left < collisionTiles[i]->getGlobalBounds().left){
+						dirMulX = -1;
+					}
+					// std::cerr<<"X gap to hug wall : "<<xOffset * dirMulX <<std::endl;
+					//If the tile is closer (movementX less than previous, store it)
+					if(collisionReadjustX > xOffset)collisionReadjustX = xOffset;
+				}
+			}
+			for(int i=0; i < levelsEnemiesCollSprites[currentLevel].size();++i){
+				sf::FloatRect futurRect = (*ptr)->currentSprite.getGlobalBounds();
+				futurRect.left += (*ptr)->moveX;
+				movementRect = getContainingRect((*ptr)->currentSprite.getGlobalBounds(),futurRect);
+				if(movementRect->intersects(levelsEnemiesCollSprites[currentLevel][i]->getGlobalBounds())){
+					sf::FloatRect intersection;
+					movementRect->intersects(levelsEnemiesCollSprites[currentLevel][i]->getGlobalBounds(),intersection);
+					
+					float xOffset = intersection.width;
+					if(movementRect->left < levelsEnemiesCollSprites[currentLevel][i]->getGlobalBounds().left){
+						dirMulX = -1;
+					}
+					// std::cerr<<"X gap to hug wall : "<<xOffset * dirMulX <<std::endl;
+					//If the tile is closer (movementX less than previous, store it)
+					if(collisionReadjustX > xOffset)collisionReadjustX = xOffset;
 				}
 			}
 
-			for(int j = 0; j < enemiesCollisionTiles.size();++j){
-				if((*ptr) -> isColliding(enemiesCollisionTiles[j]->getGlobalBounds())){
-					(*ptr) -> handleWallCollision(enemiesCollisionTiles[j]->getGlobalBounds());
+			if(collisionReadjustX < BIG_FLOAT){
+				(*ptr)->moveX += collisionReadjustX * dirMulX;
+				changeDir = true;
+			}
+
+			//Y-Collision
+			collisionReadjustY= BIG_FLOAT;
+			// Predict movement
+			sf::FloatRect futurRect = (*ptr)->currentSprite.getGlobalBounds();
+			futurRect.top += (*ptr)->moveY;
+			movementRect = getContainingRect((*ptr)->currentSprite.getGlobalBounds(),futurRect);
+			
+			/// Collision with full tiles
+			for(int i = 0;i < collisionTiles.size();++i){
+				if(movementRect->intersects(collisionTiles[i]->getGlobalBounds())){
+					sf::FloatRect intersection;
+					movementRect->intersects(collisionTiles[i]->getGlobalBounds(),intersection);
+
+					float yOffset = intersection.height;
+					if(movementRect->top < collisionTiles[i]->getGlobalBounds().top){
+						dirMulY = -1;
+					}
+					// std::cerr<<"Y gap to hug wall : "<<yOffset<<" Dir modofier : " << dirMulY<< std::endl;
+					//If the tile is closer (movementY less than previous, store it)
+					if(collisionReadjustY > yOffset)collisionReadjustY = yOffset;
 				}
+			}
+			/// Collision with top tiles
+			for(int i = 0;i < levelsTopSprites[currentLevel].size();++i){
+				if(movementRect->intersects(levelsTopSprites[currentLevel][i]->getGlobalBounds())){
+					sf::FloatRect intersection;
+					movementRect->intersects(levelsTopSprites[currentLevel][i]->getGlobalBounds(),intersection);
+
+					float yOffset = intersection.height;
+					//If top collision AND the tile is closer (movementY less than previous, store it)
+					// std::cerr<<movementRect->top <<" "<< levelsTopSprites[currentLevel][i]->getGlobalBounds().top<< " >> "<< (movementRect->top < levelsTopSprites[currentLevel][i]->getGlobalBounds().top) << std::endl;
+					// std::cerr<<collisionReadjustY << " "<< yOffset<<">>"<<(collisionReadjustY > yOffset)<<std::endl;
+					//FIXME 2nd condition might fuck up with low FPS
+					if(movementRect->top < levelsTopSprites[currentLevel][i]->getGlobalBounds().top && yOffset <= GRAVITY * OPTIMAL_FPS && collisionReadjustY > yOffset){
+						collisionReadjustY = yOffset;
+						dirMulY = -1;
+					}
+				}
+			}
+			///Set Y adjust
+			if(collisionReadjustY < BIG_FLOAT){
+				// std::cerr << "Readjusting y by " << collisionReadjustY * dirMulY<<std::endl;
+				(*ptr)->moveY += collisionReadjustY * dirMulY;
 			}
 
 			if((*ptr)->isColliding(player.currentSprite.getGlobalBounds())){
@@ -493,6 +570,9 @@ int main(){
 				if(destroyEnemy)enemies.erase(ptr);
 				else player.getHit();
 			}
+
+			(*ptr) -> doMove(averageTime);
+			if(changeDir)(*ptr)->direction*=-1;
 		}
 
 		for(int i = 0; i < rings.size(); ++i){

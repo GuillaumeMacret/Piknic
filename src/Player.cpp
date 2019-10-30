@@ -240,7 +240,7 @@ void Player::setVelocityInMoveY(){
 void Player::doVelocityMove(float timeElapsed){
     if(isChargingSpinDash)return;
     lastBoundingBox = sf::FloatRect(currentSprite.getGlobalBounds());
-	std::cerr<<"Vector moving : "<<moveX<<", "<<moveY<<std::endl;
+	//std::cerr<<"Vector moving : "<<moveX<<", "<<moveY<<std::endl;
     currentSprite.move(sf::Vector2f(moveX * timeElapsed * OPTIMAL_FPS,moveY* timeElapsed * OPTIMAL_FPS));
 }
 

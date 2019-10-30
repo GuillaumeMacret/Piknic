@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 
-#define ENEMY_BASE_SPEED 400
+
 
 class Enemy{
 private:
@@ -16,7 +16,7 @@ public:
     Enemy(float x, float y);
     ~Enemy();
 
-    void doMove();
+    void doMove(float timeElapsed);
     bool isColliding(sf::FloatRect box);
     void setGravityForces(float timeElapsed);
     void setMovementForces(float timeElapsed);
