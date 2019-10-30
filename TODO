@@ -2,17 +2,16 @@
 
 ## Vital
 
-- Level design
 - I-frame anim bug???
 
 ## Very important
 
 - Mettre un niveau avec 69 anneaux
 - Use matrix to test less collisions
-- Use new colision algo on enemies
 
 ## Cool stuff
 
+- Level design
 - Plateformes qui bougent
 - Change charge spin dash sprite
 - Ring spread
