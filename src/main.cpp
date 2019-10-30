@@ -17,7 +17,7 @@
 #define MAX_TILE_ITEMS NB_TILEMAP_WIDTH * NB_TILEMAP_HEIGHT
 #define TILE_SIZE 48
 #define MAX_ENEMIES 32
-#define NB_LEVELS 2
+#define NB_LEVELS 3
 
 
 bool spriteInView(sf::Sprite *sprite, sf::View &view){
@@ -386,7 +386,7 @@ int main(){
 			sf::FloatRect futurRect = player.currentSprite.getGlobalBounds();
 			futurRect.left += player.moveX;
 			//Move the player up a bit to avoid unintended collision
-			futurRect.top -= 1;
+			futurRect.top -= GRAVITY *averageTime;
 			movementRect = getContainingRect(player.currentSprite.getGlobalBounds(),futurRect);
 			if(movementRect->intersects(collisionTiles[i]->getGlobalBounds())){
 				sf::FloatRect intersection;
@@ -440,7 +440,7 @@ int main(){
 				// std::cerr<<movementRect->top <<" "<< levelsTopSprites[currentLevel][i]->getGlobalBounds().top<< " >> "<< (movementRect->top < levelsTopSprites[currentLevel][i]->getGlobalBounds().top) << std::endl;
 				// std::cerr<<collisionReadjustY << " "<< yOffset<<">>"<<(collisionReadjustY > yOffset)<<std::endl;
 				//FIXME 2nd condition might fuck up with low FPS
-				if(movementRect->top < levelsTopSprites[currentLevel][i]->getGlobalBounds().top && yOffset <= GRAVITY * (averageTime * 2) && collisionReadjustY > yOffset){
+				if(movementRect->top < levelsTopSprites[currentLevel][i]->getGlobalBounds().top && yOffset <= GRAVITY * OPTIMAL_FPS && collisionReadjustY > yOffset){
 					collisionReadjustY = yOffset;
 					dirMulY = -1;
 				}
@@ -460,7 +460,7 @@ int main(){
 		//std::cerr<<"Vector move after : "<<player.moveX<<", "<<player.moveY<<std::endl;
 		// std::cerr<<"Falling : "<<player.isFalling<<std::endl;
 
-		player.doVelocityMove();
+		player.doVelocityMove(averageTime);
 
 		delete movementRect;
 		movementRect = getContainingRect(*player.getCurrentRect(),*player.getLastRect());
@@ -582,7 +582,7 @@ int main(){
 		player.currentSprite.setColor(sf::Color(255,255,255,255));
 
 		/*Debug*/
-		/*
+		
 		sf::RectangleShape rectMv(sf::Vector2f(movementRect->width,movementRect->height));
 		rectMv.move(sf::Vector2f(movementRect->left,movementRect->top));
 		rectMv.setFillColor(sf::Color(255,0,0,200));

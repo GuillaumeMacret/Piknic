@@ -237,11 +237,11 @@ void Player::setVelocityInMoveY(){
     moveY += velocityY;
 }
 
-void Player::doVelocityMove(){
+void Player::doVelocityMove(float timeElapsed){
     if(isChargingSpinDash)return;
     lastBoundingBox = sf::FloatRect(currentSprite.getGlobalBounds());
-	// std::cerr<<"Vector moving : "<<moveX<<", "<<moveY<<std::endl;
-    currentSprite.move(sf::Vector2f(moveX,moveY));
+	std::cerr<<"Vector moving : "<<moveX<<", "<<moveY<<std::endl;
+    currentSprite.move(sf::Vector2f(moveX * timeElapsed * OPTIMAL_FPS,moveY* timeElapsed * OPTIMAL_FPS));
 }
 
 sf::FloatRect *Player::getMovementRect(){
@@ -287,7 +287,7 @@ sf::FloatRect *Player::getLastRect(){
 }
 
 void Player::setGravityForces(float timeElapsed){
-    if(!isJumping)moveY += GRAVITY * timeElapsed;
+    if(!isJumping)moveY += GRAVITY /OPTIMAL_FPS;
 }
 
 void Player::setFrictionForces(float timeElapsed){

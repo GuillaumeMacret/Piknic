@@ -31,7 +31,7 @@ class Player{
         void setFrictionForces(float timeElapsed);
         void setGravityForces(float timeElapsed);
         void doMove();
-        void doVelocityMove();
+        void doVelocityMove(float timeElapsed);
         sf::FloatRect *getMovementRect();
         sf::FloatRect *getCurrentRect();
         sf::FloatRect *getLastRect();

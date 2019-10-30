@@ -13,11 +13,7 @@
 #define PIKA_CHARGE_R "Pika charge right"
 #define PIKA_DEAD "Pika dead"
 
-#define NO_COLLISION 0
-#define TOP_COLLISION 1
-#define BOT_COLLISION 2
-#define LEFT_COLLISION 3
-#define RIGHT_COLLISION 4
+#define OPTIMAL_FPS 60
 
 #define I_FRAME_DUR 1.0f
 
