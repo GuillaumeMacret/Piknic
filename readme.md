@@ -4,6 +4,8 @@ Piknic is the first school project of Artois' university video game master in 20
 
 ## Run
 
+### Linux
+
 *You will need to SFML installed in order to build & run*  
 To run the latest stable version of piknic use
 
@@ -11,7 +13,13 @@ To run the latest stable version of piknic use
 ./piknic
 ```
 
+### Windows
+
+Unzip "PiknicWindows.zip" and then execute Piknic.exe.
+
 ## Build & run
+
+### Linux
 
 To build directly from the sources use :
 
