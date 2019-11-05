@@ -28,3 +28,4 @@ Beware this might be unstable depending on the commit you've cloned!
 ↓ (moving) : Skull bash  
 ↓ + Hold jump (not moving) : Charge skull bash, release jump to fire  
 r : Restart level  
+n : Skip to next level
